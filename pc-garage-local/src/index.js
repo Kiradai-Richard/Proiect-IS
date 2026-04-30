@@ -1,10 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDom from 'react-dom/client';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import LoginPage from './components/auth/LoginPage';
+import HomePage  from './pages/HomePage';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDom.createRoot(document.getElementById('root'));
+
 root.render(
     <React.StrictMode>
-        <LoginPage />
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<LoginPage />}/>
+                <Route path="/home" element ={<HomePage />} /> 
+            </Routes>
+        </BrowserRouter>
     </React.StrictMode>
 );
+
+/* Basically va adaugati pagina in Routes cu url care il vreti cat timp nu e luat*/
