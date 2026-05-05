@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import './HomePage.css';
-import '../index.css';
 import ST from '../styles/styles';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../components/cart';

@@ -64,7 +64,7 @@ export default function CartPage() {
           <div style={{ textAlign: "center", padding: 60, color: "#555" }}>
             <div style={{ fontSize: 64 }}>🛒</div>
             <p>Cosul este gol</p>
-            <button style={ST.btn} onClick={() => navigate("/home")}>
+            <button style={ST.btn} onClick={() => navigate("/")}>
               Continua cumparaturile
             </button>
           </div>
