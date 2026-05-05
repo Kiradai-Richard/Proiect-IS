@@ -22,7 +22,7 @@ function ListaOp()
     const navigate = useNavigate();
     const handleLoginButton = () =>
     {
-       navigate('/');
+       navigate('/login');
     };
     return (
         <div className='lista-container'>
