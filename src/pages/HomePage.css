@@ -1,0 +1,22 @@
+.home-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+
+}
+.home-title{
+
+    font-size: 40px;
+    color: #0a0315;
+    margin: 0;
+}
+.lista-container{
+    font-size: 40px;
+    color: #3c009d;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    
+}
