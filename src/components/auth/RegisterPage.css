@@ -1,0 +1,119 @@
+.register-background {
+    background-image: linear-gradient(to bottom right, #4a4c53, #28242b);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.register-page.container {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    background: #ffffff;
+    padding-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+}
+
+.register-page .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.register-page .text {
+    color: #17131b;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.register-page .underline {
+    width: 61px;
+    height: 6px;
+    background: #1a1b1e;
+    border-radius: 9px;
+}
+
+.register-page .inputs {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.register-page .input {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: 480px;
+    height: 70px;
+    background: #eaeaea;
+    border-radius: 6px;
+}
+
+.register-page .input img {
+    margin: 0 30px;
+    width: 25px;
+}
+
+.register-page .input input {
+    height: 50px;
+    width: 400px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #171212;
+    font-size: 18px;
+}
+
+.register-page .have-account {
+    text-align: center;
+    margin-top: 25px;
+    color: #131212;
+    font-size: 17px;
+}
+
+.register-page .have-account span {
+    color: #081c9f;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.register-page .have-account span:hover {
+    text-decoration: underline;
+}
+
+.register-page .submit-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.register-page .submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 59px;
+    color: #f1ebfa;
+    background: #0c23bd;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.register-page .submit:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(12, 35, 189, 0.3);
+}
