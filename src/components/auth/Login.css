@@ -1,14 +1,13 @@
-.container{
+.container {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    margin-top: 200px;
+    margin: 60px auto auto;
     width: 600px;
     background: #ffffff;
     padding-bottom: 30px;
 }
 
-.header{
+.header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,16 +16,16 @@
     margin-top: 30px;
 }
 
-.text{
-    color: #3c009d;
+.text {
+    color: #17131b;
     font-size: 48px;
     font-weight: 700;
 }
 
-.underline{
+.underline {
     width: 61px;
     height: 6px;
-    background: #3c009d;
+    background: #1a1b1e;
     border-radius: 9px;
 }
 
@@ -37,7 +36,7 @@
     gap: 25px;
 }
 
-.input{
+.input {
     display: flex;
     align-items: center;
     margin: auto;
@@ -47,48 +46,65 @@
     border-radius: 6px;
 }
 
-.input img{
-    margin: 0px 30px;
+.input img {
+    margin: 0 30px;
 }
 
-.input input{
+.input input {
     height: 50px;
     width: 400px;
     background: transparent;
     border: none;
     outline: none;
-    color: #797979;
+    color: #171212;
     font-size: 19px;
 }
 
-.forgot-password{
+.forgot-password {
     padding-left: 62px;
-    margin-top: 27px;
-    color: #797979;
+    margin-top: 15px;
+    color: #131212;
     font-size: 18px;
 }
 
-.forgot-password span{
-    color: #4c00b4;
+.forgot-password span {
+    color: #081c9f;
     cursor: pointer;
 }
 
-.submit-container{
+.submit-container {
     display: flex;
     gap: 30px;
-    margin: 60px auto;
+    margin: 20px auto;
 }
 
-.submit{
+.submit {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 220px;
     height: 59px;
-    color: #fff;
-    background: #4c00b4;
+    color: #f1ebfa;
+    background: #0c23bd;
     border-radius: 50px;
     font-size: 19px;
     font-weight: 700;
     cursor: pointer;
+}
+
+.login-background {
+    background-image: linear-gradient(to bottom right, #4a4c53, #28242b);
+    min-height: 100vh;
+    margin: 0;
+}
+
+.submit.gray {
+    background: #EAEAEA;
+    color: #676767;
+}
+
+.submit:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+    transition: 0.2s;
 }
