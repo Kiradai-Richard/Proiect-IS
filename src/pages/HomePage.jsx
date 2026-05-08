@@ -17,7 +17,7 @@ function HomePage() {
         <div style={{... ST.app}}>
             <div className='header-bar'>
                 <h1 className='home-title'> Pc Garage</h1>
-                 <ListaOp cartCount={cartCount} />
+                <ListaOp cartCount={cartCount} />
             </div>
         </div>
     );
@@ -27,14 +27,18 @@ function ListaOp({ cartCount }) {
     const navigate = useNavigate();
     return (
         <div style={{display: 'flex',gap:20}}>
-            <button 
-                   style={{ ...ST.btn, padding: "10px 20px", fontSize: 16}}
-                   onClick={() => navigate('/login')}>Log in
+            <button
+                style={{ ...ST.btn, padding: "10px 20px", fontSize: 16}}
+                onClick={() => navigate('/login')}>Log in
             </button>
-            <button  
-                    style={{ ...ST.btn, padding: "10px 20px", fontSize: 14}}
-                    onClick={() => navigate('/cart')}>
-                    🛒 Cos {cartCount > 0 && `(${cartCount})`}
+            <button
+                style={{ ...ST.btn, padding: "10px 20px", fontSize: 16}}
+                onClick={() => navigate('/register')}>Register
+            </button>
+            <button
+                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14}}
+                onClick={() => navigate('/cart')}>
+                🛒 Cos {cartCount > 0 && `(${cartCount})`}
             </button>
 
         </div>

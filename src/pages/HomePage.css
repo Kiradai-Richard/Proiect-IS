@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-   
+
 
 }
 .home-title{
@@ -20,8 +20,8 @@
     color: #3c009d;
     display: flex;
     flex-direction: row;
-   
-    
+
+
 }
 .header-bar{
     width: 100;
