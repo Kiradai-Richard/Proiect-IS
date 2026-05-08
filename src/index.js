@@ -4,6 +4,7 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import LoginPage from './components/auth/LoginPage';
 import HomePage  from './pages/HomePage';
 import { CartPage } from './components/cart';
+import RegisterPage from "./components/auth/RegisterPage";
 
 const root = ReactDom.createRoot(document.getElementById('root'));
 
@@ -14,6 +15,7 @@ root.render(
                 <Route path="/" element={<HomePage />}/>
                 <Route path="/login" element ={<LoginPage />} />
                 <Route path="/cart" element={<CartPage />} />
+                <Route path='register' element={<RegisterPage />}/>
 
             </Routes>
         </BrowserRouter>
