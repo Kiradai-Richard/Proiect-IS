@@ -2,34 +2,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-
+    justify-content: flex-start;
+    min-height: 100vh;
 
 }
 .home-title{
-    position:absolute;
-    left: 50%;
-    transform: translateX(-50%);
+
     font-size: 40px;
-    padding: 10px 20px;
-    color: #ffffff;
+    color: #0a0315;
     margin: 0;
 }
 .lista-container{
     font-size: 40px;
     color: #3c009d;
     display: flex;
-    flex-direction: row;
-
-
-}
-.header-bar{
-    width: 100;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 20px 40px;
-    box-sizing: border-box;
-    position: relative;
+    flex-direction: column;
+    align-items: end;
+    
 }
