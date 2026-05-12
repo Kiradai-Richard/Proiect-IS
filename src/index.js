@@ -7,6 +7,7 @@ import ProductPage from './pages/ProductPage';
 import { CartPage } from './components/cart';
 import RegisterPage from "./components/auth/RegisterPage";
 import ServicePage from './components/service/ServicePage';
+import AdminPanel from "./components/admin/AdminPage";
 
 const root = ReactDom.createRoot(document.getElementById('root'));
 
@@ -20,6 +21,7 @@ root.render(
                 <Route path='register' element={<RegisterPage />}/>
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/service" element={<ServicePage />} />
+                <Route path='adminpanel' element={<AdminPanel />}/>
 
             </Routes>
         </BrowserRouter>
