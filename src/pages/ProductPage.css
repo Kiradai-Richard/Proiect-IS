@@ -93,11 +93,11 @@
 }
 
 .add-to-cart-btn {
-    background-color: #0066cc; /* Albastru eMag style */
+    background-color: #5cb85c; /* Albastru eMag style */
     color: white;
     margin-bottom: 15px;
 }
-.add-to-cart-btn:hover { background-color: #005bb5; }
+.add-to-cart-btn:hover { background-color: #4cae4c; }
 
 .favorite-btn {
     background-color: transparent;

@@ -7,10 +7,16 @@ import './ProductPage.css';
 function ProductPage() {
     const location = useLocation();
     const navigate = useNavigate();
-    
-    // Extragem datele trimise din HomePage (produsul și starea temei)
     const product = location.state?.product;
-    const isDarkMode = location.state?.isDarkMode ?? true; 
+    
+    // Preia tema salvată din localStorage, fix ca pe HomePage
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const savedTheme = localStorage.getItem('pc-garage-theme');
+        if (savedTheme !== null) {
+            return savedTheme === 'dark';
+        }
+        return true; 
+    });
 
     const [notification, setNotification] = useState(null);
     const [review, setReview] = useState('');
@@ -23,7 +29,15 @@ function ProductPage() {
 
     const { cartCount, addToCart } = useCart(notify, null);
 
-    // Dacă utilizatorul intră direct pe link fără state (ex: refresh page), afișăm eroare sau back
+    // Toggle-ul temei care modifică și localStorage pentru când te întorci pe HomePage
+    const toggleTheme = () => {
+        setIsDarkMode((prevMode) => {
+            const newMode = !prevMode;
+            localStorage.setItem('pc-garage-theme', newMode ? 'dark' : 'light');
+            return newMode;
+        });
+    };
+
     if (!product) {
         return (
             <div style={{ color: isDarkMode ? 'white' : 'black', padding: '50px', textAlign: 'center' }}>
@@ -44,18 +58,42 @@ function ProductPage() {
     return (
         <div className={`product-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, minHeight: '100vh' }}>
             
-            {/* Header-ul (păstrat minimal pentru a avea aceeasi identitate vizuală) */}
             <div className='header-bar'>
-                <button className="back-btn" onClick={() => navigate('/')}>← Înapoi</button>
+                {/* Partea stângă: Buton Înapoi + Buton Temă */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <button className="back-btn" onClick={() => navigate('/')}>← Înapoi</button>
+                    <button 
+                        className="theme-toggle-btn" 
+                        onClick={toggleTheme} 
+                        title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
+                    >
+                        {isDarkMode ? '☀️' : '🌙'}
+                    </button>
+                </div>
+                
+                {/* Centru: Titlul site-ului */}
                 <h1 className='home-title'>Pc Garage</h1>
-                <div style={{ display: 'flex', gap: 20 }}>
+                
+                {/* Partea dreaptă: Log in, Register, Coș */}
+                <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+                    <button
+                        style={{ ...ST.btn, padding: "10px 20px", fontSize: 16 }}
+                        onClick={() => navigate('/login')}
+                    >
+                        Log in
+                    </button>
+                    <button
+                        style={{ ...ST.btn, padding: "10px 20px", fontSize: 16 }}
+                        onClick={() => navigate('/register')}
+                    >
+                        Register
+                    </button>
                     <button style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }} onClick={() => navigate('/cart')}>
                         🛒 Cos {cartCount > 0 && `(${cartCount})`}
                     </button>
                 </div>
             </div>
 
-            {/* Notificare Cos / Recenzii */}
             {notification && (
                 <div className={`notification ${notification.type}`}>
                     {notification.msg}
@@ -66,7 +104,6 @@ function ProductPage() {
                 <h2 className="product-page-title">{product.title}</h2>
                 
                 <div className="product-layout">
-                    {/* Partea Stângă: Imaginea Produsului */}
                     <div className="product-image-section">
                         <div className="main-image-wrapper">
                             <img 
@@ -77,7 +114,6 @@ function ProductPage() {
                         </div>
                     </div>
 
-                    {/* Partea Dreaptă: Caseta de Acțiuni (Preț, Stoc, Butoane) */}
                     <div className="product-action-section">
                         <div className="action-box">
                             <div className="product-page-price">
@@ -103,7 +139,6 @@ function ProductPage() {
                     </div>
                 </div>
 
-                {/* Secțiunea de Recenzii (Jos) */}
                 <div className="reviews-section">
                     <h3>Recenzii Produs</h3>
                     
