@@ -95,7 +95,6 @@ body {
 .dark-theme .theme-toggle-btn { border-color: #555; color: white; }
 .light-theme .theme-toggle-btn { border-color: #ccc; color: #1a1a1a; }
 
-
 .main-content {
     padding: 30px 40px;
     max-width: 1600px;
@@ -358,6 +357,12 @@ body {
 .sort-dropdown:focus {
     border-color: #fc623c;
     box-shadow: 0 0 5px rgba(252, 98, 60, 0.3); /* Un glow subtil portocaliu */
+}
+
+.sort-label {
+    color: #1a1a1a;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 .spacer {
