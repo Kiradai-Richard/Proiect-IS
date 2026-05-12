@@ -247,7 +247,7 @@ function HomePage() {
                 </button>
 
                 <h1 className='home-title'>Pc Garage</h1>
-                <ListaOp cartCount={cartCount} />
+                <ListaOp cartCount={cartCount} isDarkMode={isDarkMode} />
             </div>
 
             {/* ADĂUGARE BARA DE SHORTCUTURI CU SORTARE */}
@@ -320,8 +320,13 @@ function HomePage() {
     );
 }
 
-function ListaOp({ cartCount }) {
+function ListaOp({ cartCount, isDarkMode }) {
     const navigate = useNavigate();
+
+    const handleServiceClick = () => {
+        navigate('/service', { state: { isDarkMode } });
+    };
+
     return (
         <div style={{ display: 'flex', gap: 10 }}>
             <button
@@ -337,6 +342,13 @@ function ListaOp({ cartCount }) {
                 Register
             </button>
             <button
+                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }}
+                onClick={handleServiceClick}
+            >
+                🔧 Service
+            </button>
+            <button
+                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }}
                 style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
                 onClick={() => navigate('/cart')}
             >
