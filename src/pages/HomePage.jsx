@@ -323,24 +323,31 @@ function HomePage() {
 function ListaOp({ cartCount }) {
     const navigate = useNavigate();
     return (
-        <div style={{ display: 'flex', gap: 20 }}>
+        <div style={{ display: 'flex', gap: 10 }}>
             <button
-                style={{ ...ST.btn, padding: "10px 20px", fontSize: 16 }}
+                style={{ ...ST.btn, padding: "10px 10px", fontSize: 16 }}
                 onClick={() => navigate('/login')}
             >
                 Log in
             </button>
             <button
-                style={{ ...ST.btn, padding: "10px 20px", fontSize: 16 }}
+                style={{ ...ST.btn, padding: "10px 10px", fontSize: 16 }}
                 onClick={() => navigate('/register')}
             >
                 Register
             </button>
             <button
-                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }}
+                style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
                 onClick={() => navigate('/cart')}
             >
                 🛒 Cos {cartCount > 0 && `(${cartCount})`}
+            </button>
+
+            <button
+                style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
+                onClick={() => navigate('/adminpanel')}
+            >
+                Admin Panel {cartCount > 0 && `(${cartCount})`}
             </button>
         </div>
     );
