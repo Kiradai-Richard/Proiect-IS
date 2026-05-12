@@ -342,7 +342,7 @@ function ListaOp({ cartCount, isDarkMode }) {
                 Register
             </button>
             <button
-                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14, background: 'linear-gradient(to right, #fc623c, #f12711)' }}
+                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }}
                 onClick={handleServiceClick}
             >
                 🔧 Service
