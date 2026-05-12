@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import './HomePage.css';
 import ST from '../styles/styles';
 import { useNavigate } from 'react-router-dom';
@@ -162,13 +162,16 @@ function HomePage() {
     const [notification, setNotification] = useState(null);
     const [sortType, setSortType] = useState('default');
     
-    // Inițializare din localStorage pentru a persista tema
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('pc-garage-theme');
         if (savedTheme !== null) {
             return savedTheme === 'dark';
         }
-        return true; // Implicit e Dark Mode
+        return true;
+    });
+
+    const [fontFamily, setFontFamily] = useState(() => {
+        return localStorage.getItem('pc-garage-font') || 'Arial, sans-serif';
     });
     
     const notify = useCallback((msg, type = "success") => {
@@ -178,7 +181,6 @@ function HomePage() {
     
     const { cartCount, addToCart } = useCart(notify, null);
 
-    // Funcție pentru comutarea și salvarea temei în localStorage
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => {
             const newMode = !prevMode;
@@ -187,7 +189,12 @@ function HomePage() {
         });
     };
 
-    // Funcție pentru sortarea produselor
+    const handleFontChange = (e) => {
+        const newFont = e.target.value;
+        setFontFamily(newFont);
+        localStorage.setItem('pc-garage-font', newFont);
+    };
+
     const sortProducts = (products, type) => {
         const sortedArray = [...products];
         switch(type) {
@@ -245,15 +252,25 @@ function HomePage() {
     );
 
     return (
-        <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app }}>
+        <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, fontFamily: fontFamily }}>
             <div className='header-bar'>
-                <button 
-                    className="theme-toggle-btn" 
-                    onClick={toggleTheme} 
-                    title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
-                >
-                    {isDarkMode ? '☀️' : '🌙'}
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <button 
+                        className="theme-toggle-btn" 
+                        onClick={toggleTheme} 
+                        title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
+                    >
+                        {isDarkMode ? '☀️' : '🌙'}
+                    </button>
+
+                    <select className="font-dropdown" value={fontFamily} onChange={handleFontChange} title="Alege fontul">
+                        <option value="Arial, sans-serif">Arial (Default)</option>
+                        <option value="'Roboto', sans-serif">Roboto</option>
+                        <option value="'Open Sans', sans-serif">Open Sans</option>
+                        <option value="'Montserrat', sans-serif">Montserrat</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
+                    </select>
+                </div>
 
                 <h1 className='home-title'>Pc Garage</h1>
                 <ListaOp cartCount={cartCount} />

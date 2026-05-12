@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
 .home-container{
     display: flex;
     flex-direction: column;
@@ -92,6 +94,30 @@ body {
 }
 .dark-theme .theme-toggle-btn { border-color: #555; color: white; }
 .light-theme .theme-toggle-btn { border-color: #ccc; color: #1a1a1a; }
+
+/* Stiluri Dropdown Font */
+.font-dropdown {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.dark-theme .font-dropdown {
+    background-color: #2b2b2b;
+    color: white;
+    border-color: #555;
+}
+
+.font-dropdown:hover {
+    border-color: #fc623c;
+}
 
 .main-content {
     padding: 30px 40px;
@@ -342,4 +368,84 @@ body {
 
 .spacer {
     height: 60px;
+}
+
+/* ==================================================
+   RESPONSIVE DESIGN (TELEFOANE ȘI TABLETE)
+================================================== */
+
+/* Tablete mari / Laptopuri mici */
+@media (max-width: 1200px) {
+    .product-grid { 
+        grid-template-columns: repeat(4, 1fr); 
+    }
+}
+
+/* Tablete medii (Aici rezolvăm suprapunerea din Header) */
+@media (max-width: 992px) {
+    .product-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+    }
+    /* Trecem header-ul pe coloană ca să nu se mai lovească elementele */
+    .header-bar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    /* Anulăm poziția absolută a titlului și îl punem primul sus */
+    .home-title {
+        position: relative; 
+        left: 0;
+        transform: none;
+        text-align: center;
+        order: -1; 
+    }
+    .header-bar > div {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .shortcuts-bar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    .shortcut-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+}
+
+/* Tablete mici / Telefoane mari */
+@media (max-width: 768px) {
+    .product-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+    .header-bar {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+    .home-title {
+        position: relative; /* Anulează suprapunerea forțată */
+        left: 0;
+        transform: none;
+        text-align: center;
+        order: -1; /* Pune titlul primul sus */
+    }
+    .header-bar > div {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* Telefoane standard */
+@media (max-width: 576px) {
+    .product-grid { 
+        grid-template-columns: repeat(1, 1fr); 
+    }
+    .main-content { 
+        padding: 20px; 
+    }
 }

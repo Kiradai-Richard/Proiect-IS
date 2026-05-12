@@ -9,13 +9,14 @@ function ProductPage() {
     const navigate = useNavigate();
     const product = location.state?.product;
     
-    // Preia tema salvată din localStorage, fix ca pe HomePage
+    // Extragem stările din localStorage
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('pc-garage-theme');
-        if (savedTheme !== null) {
-            return savedTheme === 'dark';
-        }
-        return true; 
+        return savedTheme !== null ? savedTheme === 'dark' : true; 
+    });
+
+    const [fontFamily, setFontFamily] = useState(() => {
+        return localStorage.getItem('pc-garage-font') || 'Arial, sans-serif';
     });
 
     const [notification, setNotification] = useState(null);
@@ -29,13 +30,19 @@ function ProductPage() {
 
     const { cartCount, addToCart } = useCart(notify, null);
 
-    // Toggle-ul temei care modifică și localStorage pentru când te întorci pe HomePage
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => {
             const newMode = !prevMode;
             localStorage.setItem('pc-garage-theme', newMode ? 'dark' : 'light');
             return newMode;
         });
+    };
+
+    // Funcția care schimbă și salvează fontul
+    const handleFontChange = (e) => {
+        const newFont = e.target.value;
+        setFontFamily(newFont);
+        localStorage.setItem('pc-garage-font', newFont);
     };
 
     if (!product) {
@@ -56,10 +63,10 @@ function ProductPage() {
     };
 
     return (
-        <div className={`product-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, minHeight: '100vh' }}>
+        <div className={`product-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, minHeight: '100vh', fontFamily: fontFamily }}>
             
             <div className='header-bar'>
-                {/* Partea stângă: Buton Înapoi + Buton Temă */}
+                {/* Partea stângă: Buton Înapoi + Buton Temă + Dropdown Font */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                     <button className="back-btn" onClick={() => navigate('/')}>← Înapoi</button>
                     <button 
@@ -69,6 +76,13 @@ function ProductPage() {
                     >
                         {isDarkMode ? '☀️' : '🌙'}
                     </button>
+                    <select className="font-dropdown" value={fontFamily} onChange={handleFontChange} title="Alege fontul">
+                        <option value="Arial, sans-serif">Arial (Default)</option>
+                        <option value="'Roboto', sans-serif">Roboto</option>
+                        <option value="'Open Sans', sans-serif">Open Sans</option>
+                        <option value="'Montserrat', sans-serif">Montserrat</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
+                    </select>
                 </div>
                 
                 {/* Centru: Titlul site-ului */}
