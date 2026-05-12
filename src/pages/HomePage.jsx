@@ -285,13 +285,13 @@ function HomePage() {
                     ))}
                 </div>
                 
-                <div className="sort-container">
-                    <label htmlFor="sort-dropdown" className="sort-label">Sortează:</label>
-                    <select 
-                        id="sort-dropdown" 
-                        className="sort-dropdown"
-                        value={sortType} 
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <label htmlFor="sort-dropdown" style={{ ...ST.label, color: '#1a1a1a' }}>Sortează:</label>
+                    <select
+                        id="sort-dropdown"
+                        value={sortType}
                         onChange={(e) => setSortType(e.target.value)}
+                        style={ST.select}
                     >
                         <option value="default">Implicit</option>
                         <option value="alpha-asc">Alfabetic (A-Z)</option>
