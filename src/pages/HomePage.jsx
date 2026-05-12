@@ -161,7 +161,18 @@ function HomePage() {
     const navigate = useNavigate();
     const [notification, setNotification] = useState(null);
     const [sortType, setSortType] = useState('default');
-    const [isDarkMode, setIsDarkMode] = useState(true); // State pentru tema
+    
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const savedTheme = localStorage.getItem('pc-garage-theme');
+        if (savedTheme !== null) {
+            return savedTheme === 'dark';
+        }
+        return true;
+    });
+
+    const [fontFamily, setFontFamily] = useState(() => {
+        return localStorage.getItem('pc-garage-font') || 'Arial, sans-serif';
+    });
     
     const notify = useCallback((msg, type = "success") => {
         setNotification({ msg, type });
@@ -170,12 +181,20 @@ function HomePage() {
     
     const { cartCount, addToCart } = useCart(notify, null);
 
-    // Funcție pentru comutarea temei
     const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
+        setIsDarkMode((prevMode) => {
+            const newMode = !prevMode;
+            localStorage.setItem('pc-garage-theme', newMode ? 'dark' : 'light');
+            return newMode;
+        });
     };
 
-    // Funcție pentru sortarea produselor
+    const handleFontChange = (e) => {
+        const newFont = e.target.value;
+        setFontFamily(newFont);
+        localStorage.setItem('pc-garage-font', newFont);
+    };
+
     const sortProducts = (products, type) => {
         const sortedArray = [...products];
         switch(type) {
@@ -190,13 +209,11 @@ function HomePage() {
         }
     };
 
-    // Funcție reutilizabilă pentru afișarea unui produs
     const renderProduct = (proc) => (
         <div key={proc.id} className="product-card">
-            {/* Wrap clickabil pentru produs care trimite datele in state */}
             <div 
                 style={{ cursor: 'pointer', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                onClick={() => navigate(`/product/${proc.id}`, { state: { product: proc, isDarkMode: isDarkMode } })}
+                onClick={() => navigate(`/product/${proc.id}`, { state: { product: proc } })}
             >
                 <div className="image-wrapper">
                     <img 
@@ -225,7 +242,7 @@ function HomePage() {
             <button
                 className="add-to-cart-btn"
                 onClick={(e) => {
-                    e.stopPropagation(); // Previne click-ul de la parinte (navigarea pe pagina produsului)
+                    e.stopPropagation();
                     addToCart(proc);
                 }}
             >
@@ -235,22 +252,30 @@ function HomePage() {
     );
 
     return (
-        <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app }}>
+        <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, fontFamily: fontFamily }}>
             <div className='header-bar'>
-                {/* Butonul de temă în stânga */}
-                <button 
-                    className="theme-toggle-btn" 
-                    onClick={toggleTheme} 
-                    title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
-                >
-                    {isDarkMode ? '☀️' : '🌙'}
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <button 
+                        className="theme-toggle-btn" 
+                        onClick={toggleTheme} 
+                        title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
+                    >
+                        {isDarkMode ? '☀️' : '🌙'}
+                    </button>
+
+                    <select className="font-dropdown" value={fontFamily} onChange={handleFontChange} title="Alege fontul">
+                        <option value="Arial, sans-serif">Arial (Default)</option>
+                        <option value="'Roboto', sans-serif">Roboto</option>
+                        <option value="'Open Sans', sans-serif">Open Sans</option>
+                        <option value="'Montserrat', sans-serif">Montserrat</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
+                    </select>
+                </div>
 
                 <h1 className='home-title'>Pc Garage</h1>
                 <ListaOp cartCount={cartCount} isDarkMode={isDarkMode} />
             </div>
 
-            {/* ADĂUGARE BARA DE SHORTCUTURI CU SORTARE */}
             <div className="shortcuts-bar">
                 <div className="shortcut-links">
                     {shortcuts.map(shortcut => (
@@ -276,7 +301,6 @@ function HomePage() {
                 </div>
             </div>
             
-            {/* Afisare notificare */}
             {notification && (
                 <div className={`notification ${notification.type}`}>
                     {notification.msg}
@@ -284,7 +308,6 @@ function HomePage() {
             )}
 
             <div className="main-content">
-                {/* Sectiunea Sisteme PC */}
                 <div className="category-section" id="section-sisteme">
                     <h2 className="section-title">SISTEME DESKTOP PC</h2>
                     <div className="product-grid">
@@ -292,7 +315,6 @@ function HomePage() {
                     </div>
                 </div>
 
-                {/* Sectiunea Procesoare */}
                 <div className="category-section" id="section-procesoare">
                     <h2 className="section-title">PROCESOARE</h2>
                     <div className="product-grid">
@@ -300,7 +322,6 @@ function HomePage() {
                     </div>
                 </div>
 
-                {/* Sectiunea Placi Video */}
                 <div className="category-section" id="section-placi-video">
                     <h2 className="section-title">PLĂCI VIDEO</h2>
                     <div className="product-grid">
@@ -308,7 +329,6 @@ function HomePage() {
                     </div>
                 </div>
 
-                {/* Sectiunea Placi de Baza */}
                 <div className="category-section" id="section-placi-baza">
                     <h2 className="section-title">PLĂCI DE BAZĂ</h2>
                     <div className="product-grid">
