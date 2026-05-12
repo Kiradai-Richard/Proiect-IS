@@ -95,30 +95,6 @@ body {
 .dark-theme .theme-toggle-btn { border-color: #555; color: white; }
 .light-theme .theme-toggle-btn { border-color: #ccc; color: #1a1a1a; }
 
-/* Stiluri Dropdown Font */
-.font-dropdown {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: white;
-    color: #1a1a1a;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.dark-theme .font-dropdown {
-    background-color: #2b2b2b;
-    color: white;
-    border-color: #555;
-}
-
-.font-dropdown:hover {
-    border-color: #fc623c;
-}
-
 .main-content {
     padding: 30px 40px;
     max-width: 1600px;
@@ -343,27 +319,44 @@ body {
     gap: 10px;
 }
 
-.sort-label {
-    color: #1a1a1a;
-    font-weight: bold;
-    font-size: 15px;
-}
-
+/* ==================================================
+   STILURI COMUNE DROPDOWN (FONT & SORTARE)
+================================================== */
+.font-dropdown,
 .sort-dropdown {
-    padding: 6px 12px;
-    border-radius: 4px;
-    border: 1px solid #1a1a1a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
     background-color: white;
     color: #1a1a1a;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     outline: none;
+    transition: all 0.2s ease;
 }
 
+/* Tema Dark pentru Dropdown-uri */
+.dark-theme .font-dropdown,
+.dark-theme .sort-dropdown {
+    background-color: #2b2b2b;
+    color: white;
+    border-color: #555;
+}
+
+/* Efectul la trecerea cu mouse-ul */
+.font-dropdown:hover,
+.sort-dropdown:hover,
+.font-dropdown:focus,
 .sort-dropdown:focus {
-    border-color: #1a1a1a;
-    box-shadow: 0 0 5px rgba(26, 26, 26, 0.5);
+    border-color: #fc623c;
+    box-shadow: 0 0 5px rgba(252, 98, 60, 0.3); /* Un glow subtil portocaliu */
+}
+
+.sort-label {
+    color: #1a1a1a;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 .spacer {
