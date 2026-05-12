@@ -362,13 +362,12 @@ function ListaOp({ cartCount, isDarkMode }) {
                 Register
             </button>
             <button
-                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }}
+                style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
                 onClick={handleServiceClick}
             >
                 🔧 Service
             </button>
             <button
-                style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }}
                 style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
                 onClick={() => navigate('/cart')}
             >
