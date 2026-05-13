@@ -6,6 +6,8 @@ import HomePage  from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import { CartPage } from './components/cart';
 import RegisterPage from "./components/auth/RegisterPage";
+import RecuperareCont from "./components/auth/RecuperareCont";
+import ResetPassword from "./components/auth/ResetPassword";
 import ServicePage from './components/service/ServicePage';
 import AdminPanel from "./components/admin/AdminPage";
 
@@ -19,6 +21,8 @@ root.render(
                 <Route path="/login" element ={<LoginPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path='register' element={<RegisterPage />}/>
+                <Route path="/recuperare-cont" element={<RecuperareCont />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/service" element={<ServicePage />} />
                 <Route path='adminpanel' element={<AdminPanel />}/>

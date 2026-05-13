@@ -44,7 +44,7 @@ const mockProcessors = Array.from({ length: 20 }, (_, index) => {
             id: 'cpu-' + index,
             title: `Procesor Intel ${productData.name} Box`,
             price: productData.price,
-            installments: Math.floor(productData.price / 4), 
+            installments: Math.floor(productData.price / 4),
             image: productData.image
         };
     } else {
@@ -53,7 +53,7 @@ const mockProcessors = Array.from({ length: 20 }, (_, index) => {
             id: 'cpu-' + index,
             title: `Procesor AMD ${productData.name} Box`,
             price: productData.price,
-            installments: Math.floor(productData.price / 4), 
+            installments: Math.floor(productData.price / 4),
             image: productData.image
         };
     }
@@ -161,7 +161,8 @@ function HomePage() {
     const navigate = useNavigate();
     const [notification, setNotification] = useState(null);
     const [sortType, setSortType] = useState('default');
-    
+    const [searchTerm, setSearchTerm] = useState('');
+
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('pc-garage-theme');
         if (savedTheme !== null) {
@@ -173,13 +174,29 @@ function HomePage() {
     const [fontFamily, setFontFamily] = useState(() => {
         return localStorage.getItem('pc-garage-font') || 'Arial, sans-serif';
     });
-    
+
     const notify = useCallback((msg, type = "success") => {
         setNotification({ msg, type });
         setTimeout(() => setNotification(null), 3000);
     }, []);
-    
+
     const { cartCount, addToCart } = useCart(notify, null);
+
+    const allProducts = [
+        ...mockSystems,
+        ...mockProcessors,
+        ...mockGpus,
+        ...mockMotherboards
+    ];
+
+    const filteredProducts = allProducts.filter((product) =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSearchProductClick = (product) => {
+        navigate(`/product/${product.id}`, { state: { product } });
+        setSearchTerm('');
+    };
 
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => {
@@ -211,34 +228,34 @@ function HomePage() {
 
     const renderProduct = (proc) => (
         <div key={proc.id} className="product-card">
-            <div 
+            <div
                 style={{ cursor: 'pointer', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                 onClick={() => navigate(`/product/${proc.id}`, { state: { product: proc } })}
             >
                 <div className="image-wrapper">
-                    <img 
-                        src={proc.image} 
-                        alt={proc.title} 
+                    <img
+                        src={proc.image}
+                        alt={proc.title}
                         className="product-img"
                         onError={(e) => { e.target.src = 'https://via.placeholder.com/200?text=Fara+Imagine'; }}
                     />
                 </div>
-                
+
                 <div className="rating-banner">
                     <span>👍</span> <span>👍</span> <span>👍</span>
                 </div>
-                
+
                 <div className="product-title">{proc.title}</div>
-                
+
                 <div className="product-price">
                     {proc.price.toFixed(2).replace('.', ',')} RON
                 </div>
-                
+
                 <div className="product-installments">
                     4 rate fara dobanda, doar {proc.installments} RON
                 </div>
             </div>
-            
+
             <button
                 className="add-to-cart-btn"
                 onClick={(e) => {
@@ -255,9 +272,9 @@ function HomePage() {
         <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, fontFamily: fontFamily }}>
             <div className='header-bar'>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <button 
-                        className="theme-toggle-btn" 
-                        onClick={toggleTheme} 
+                    <button
+                        className="theme-toggle-btn"
+                        onClick={toggleTheme}
                         title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
                     >
                         {isDarkMode ? '☀️' : '🌙'}
@@ -284,7 +301,51 @@ function HomePage() {
                         </a>
                     ))}
                 </div>
-                
+
+                <div className="search-container">
+                    <input
+                        type="text"
+                        className="product-search-input"
+                        placeholder="Caută produse..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+
+                    {searchTerm && (
+                        <div className="search-results">
+                            {filteredProducts.length > 0 ? (
+                                filteredProducts.map((product) => (
+                                    <div
+                                        key={product.id}
+                                        className="search-result-item"
+                                        onClick={() => handleSearchProductClick(product)}
+                                    >
+                                        <img
+                                            src={product.image}
+                                            alt={product.title}
+                                            className="search-result-img"
+                                            onError={(e) => {
+                                                e.target.src = 'https://via.placeholder.com/50?text=Img';
+                                            }}
+                                        />
+
+                                        <div>
+                                            <div className="search-result-title">{product.title}</div>
+                                            <div className="search-result-price">
+                                                {product.price.toFixed(2).replace('.', ',')} RON
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="search-no-results">
+                                    Nu s-au găsit produse.
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
                 <div className="sort-container">
                     <label htmlFor="sort-dropdown" className="sort-label">Sortează:</label>
                     <select
@@ -300,46 +361,51 @@ function HomePage() {
                     </select>
                 </div>
             </div>
-            
-            {notification && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.msg}
-                </div>
-            )}
 
+            {/* SECTIONS RESTORED: Render the mapped products to the screen */}
             <div className="main-content">
-                <div className="category-section" id="section-sisteme">
-                    <h2 className="section-title">SISTEME DESKTOP PC</h2>
+                <section id="section-sisteme" className="product-section">
+                    <h2>Sisteme Desktop PC</h2>
                     <div className="product-grid">
                         {sortProducts(mockSystems, sortType).map(renderProduct)}
                     </div>
-                </div>
+                </section>
 
-                <div className="category-section" id="section-procesoare">
-                    <h2 className="section-title">PROCESOARE</h2>
+                <section id="section-procesoare" className="product-section">
+                    <h2>Procesoare</h2>
                     <div className="product-grid">
                         {sortProducts(mockProcessors, sortType).map(renderProduct)}
                     </div>
-                </div>
+                </section>
 
-                <div className="category-section" id="section-placi-video">
-                    <h2 className="section-title">PLĂCI VIDEO</h2>
+                <section id="section-placi-video" className="product-section">
+                    <h2>Plăci Video</h2>
                     <div className="product-grid">
                         {sortProducts(mockGpus, sortType).map(renderProduct)}
                     </div>
-                </div>
+                </section>
 
-                <div className="category-section" id="section-placi-baza">
-                    <h2 className="section-title">PLĂCI DE BAZĂ</h2>
+                <section id="section-placi-baza" className="product-section">
+                    <h2>Plăci De Bază</h2>
                     <div className="product-grid">
                         {sortProducts(mockMotherboards, sortType).map(renderProduct)}
                     </div>
-                </div>
+                </section>
             </div>
+
+            {/* Notifications Display */}
+            {notification && (
+                <div className={`notification-toast ${notification.type}`}>
+                    {notification.msg}
+                </div>
+            )}
         </div>
     );
 }
 
+// ==========================================
+// COMPONENTA LISTA OPTIUNI
+// ==========================================
 function ListaOp({ cartCount, isDarkMode }) {
     const navigate = useNavigate();
 
@@ -378,7 +444,7 @@ function ListaOp({ cartCount, isDarkMode }) {
                 style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
                 onClick={() => navigate('/adminpanel')}
             >
-                Admin Panel {cartCount > 0 && `(${cartCount})`}
+                Admin Panel
             </button>
         </div>
     );
