@@ -66,13 +66,14 @@ body {
     padding: 20px 40px;
     box-sizing: border-box;
     position: relative;
+    z-index: 9999;
 }
 
 .home-title {
     position:absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 40px;
+    font-size: 60px;
     padding: 10px 20px;
     margin: 0;
 }
@@ -451,6 +452,8 @@ body {
 .search-container {
     position: relative;
     width: 320px;
+    gap: 10px;
+    padding-right: 20%;
 }
 
 .product-search-input {

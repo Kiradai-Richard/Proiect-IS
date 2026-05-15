@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback,useEffect,useRef} from 'react';
 import './HomePage.css';
 import ST from '../styles/styles';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../components/cart';
-
 // ==========================================
 // DATE PROCESOARE
 // ==========================================
@@ -157,12 +156,26 @@ const shortcuts = [
 // ==========================================
 // COMPONENTA PRINCIPALĂ
 // ==========================================
-function HomePage() {
+function HomePage() {   
     const navigate = useNavigate();
     const [notification, setNotification] = useState(null);
     const [sortType, setSortType] = useState('default');
+    //variabile pentru search box
     const [searchTerm, setSearchTerm] = useState('');
+    const [showResults, setShowResults] = useState(false);
+    const searchRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setShowResults(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
 
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []); 
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('pc-garage-theme');
         if (savedTheme !== null) {
@@ -267,8 +280,8 @@ function HomePage() {
             </button>
         </div>
     );
-
     return (
+        
         <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, fontFamily: fontFamily }}>
             <div className='header-bar'>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -289,7 +302,7 @@ function HomePage() {
                     </select>
                 </div>
 
-                <h1 className='home-title'>Pc Garage</h1>
+                <h1 style={{ ...ST.logo, fontSize: "60px" }} >Pc Garage</h1>
                 <ListaOp cartCount={cartCount} isDarkMode={isDarkMode} />
             </div>
 
@@ -302,26 +315,32 @@ function HomePage() {
                     ))}
                 </div>
 
-                <div className="search-container">
+                <div className="search-container"ref={searchRef}>
                     <input
                         type="text"
                         className="product-search-input"
                         placeholder="Caută produse..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {setSearchTerm(e.target.value)
+                                         setShowResults(true);
+                        }}
+                        
                     />
+                    
 
-                    {searchTerm && (
+                    {searchTerm && showResults && (
                         <div className="search-results">
                             {filteredProducts.length > 0 ? (
                                 filteredProducts.map((product) => (
                                     <div
                                         key={product.id}
                                         className="search-result-item"
-                                        onClick={() => handleSearchProductClick(product)}
+                                        onClick={() =>{ handleSearchProductClick(product)
+                                                        setShowResults(false);
+                                        }}
                                     >
                                         <img
-                                            src={product.image}
+                                            src={product.image} 
                                             alt={product.title}
                                             className="search-result-img"
                                             onError={(e) => {
@@ -399,6 +418,7 @@ function HomePage() {
                     {notification.msg}
                 </div>
             )}
+            <Footer />
         </div>
     );
 }
@@ -406,48 +426,110 @@ function HomePage() {
 // ==========================================
 // COMPONENTA LISTA OPTIUNI
 // ==========================================
+
 function ListaOp({ cartCount, isDarkMode }) {
     const navigate = useNavigate();
+    
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const handleServiceClick = () => {
-        navigate('/service', { state: { isDarkMode } });
+    const handleNavigation = (path, state = {}) => {
+        navigate(path, state);
+        setIsMenuOpen(false); 
     };
-
     return (
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div  style={{ position: 'relative', display: 'inline-block' }}>
             <button
-                style={{ ...ST.btn, padding: "10px 10px", fontSize: 16 }}
-                onClick={() => navigate('/login')}
+                style={{ ...ST.btn, padding: "10px 15px", fontSize: 16,  minWidth: '150px' }}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-                Log in
+                ☰ Meniu 
             </button>
-            <button
-                style={{ ...ST.btn, padding: "10px 10px", fontSize: 16 }}
-                onClick={() => navigate('/register')}
-            >
-                Register
-            </button>
-            <button
-                style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
-                onClick={handleServiceClick}
-            >
-                🔧 Service
-            </button>
-            <button
-                style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
-                onClick={() => navigate('/cart')}
-            >
-                🛒 Cos {cartCount > 0 && `(${cartCount})`}
-            </button>
+            {isMenuOpen && (
+                <div style={{
+                    position: 'absolute',
+                    top: '100%',       
+                    left: '50%',                     
+                    transform: 'translateX(-50%)',   
+                     marginTop: '10px', 
+                    display: 'flex',
+                    backgroundColor: isDarkMode?'rgba(0, 0, 0, 0.5)':'rgba(255, 252, 252, 0.5)' ,
+                    flexDirection: 'column',
+                    gap: '10px',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.5)', 
+                    zIndex: 1000,
+                    minWidth: '150px'
 
-            <button
-                style={{ ...ST.btn, padding: "10px 10px", fontSize: 14 }}
-                onClick={() => navigate('/adminpanel')}
-            >
-                Admin Panel
-            </button>
+                }}>
+                    
+                    <button
+                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
+                        onClick={() => handleNavigation('/login')}
+                    >
+                        Log in
+                    </button>
+                    
+                    <button
+                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
+                        onClick={() => handleNavigation('/register')}
+                    >
+                        Register
+                    </button>
+                    
+                    <button
+                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
+                        onClick={() => handleNavigation('/service', { state: { isDarkMode } })}
+                    >
+                        🔧 Service
+                    </button>
+                    
+                    <button
+                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
+                        onClick={() => handleNavigation('/cart')}
+                    >
+                        🛒 Cos {cartCount > 0 && `(${cartCount})`}
+                    </button>
+
+                    <button
+                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
+                        onClick={() => handleNavigation('/adminpanel')}
+                    >
+                        Admin Panel
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
-
+function Footer()
+{
+    return(
+        <div style={{...ST.footer, 
+            padding: "20px 40px",           
+            display: "flex",               
+            flexDirection: "row",          
+            justifyContent: "space-between",
+            alignItems: "center",           
+            flexWrap: "wrap",              
+            gap: "20px"}}>
+            <div style= {{ color: "#888", fontSize: "14px" }}>
+                &copy; {new Date().getFullYear()} Pc Garage. Toate drepturile rezervate.
+            </div>
+            <div style={{ display:"flex", gap:"24px",alignItems: "center"}}>
+            <a
+                style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}
+            >
+                ✉️ support@pcgarage.ro
+            </a>
+            <a 
+                    
+                    style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}
+                >
+                    📞 0123 456 789
+                </a>
+            </div>
+        </div>
+    );
+}
 export default HomePage;

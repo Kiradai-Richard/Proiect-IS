@@ -86,7 +86,7 @@ function ProductPage() {
                 </div>
                 
                 {/* Centru: Titlul site-ului */}
-                <h1 className='home-title'>Pc Garage</h1>
+                 <h1 style={{ ...ST.logo, fontSize: "60px" }} >Pc Garage</h1>
                 
                 {/* Partea dreaptă: Log in, Register, Coș */}
                 <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
