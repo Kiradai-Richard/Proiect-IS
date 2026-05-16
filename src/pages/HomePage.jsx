@@ -1,8 +1,9 @@
-import React, { useState, useCallback,useEffect,useRef} from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import './HomePage.css';
 import ST from '../styles/styles';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../components/cart';
+
 // ==========================================
 // DATE PROCESOARE
 // ==========================================
@@ -145,7 +146,6 @@ const mockSystems = pcSystemsModels.map((productData, index) => ({
     image: productData.image
 }));
 
-// DEFINIREA SECȚIUNILOR PENTRU BARA DE SHORTCUTURI
 const shortcuts = [
     { name: 'Sisteme Desktop PC', id: 'section-sisteme' },
     { name: 'Procesoare', id: 'section-procesoare' },
@@ -153,17 +153,23 @@ const shortcuts = [
     { name: 'Plăci De Bază', id: 'section-placi-baza' }
 ];
 
+// Toate produsele pentru SearchBar
+const allProducts = [
+    ...mockSystems,
+    ...mockProcessors,
+    ...mockGpus,
+    ...mockMotherboards
+];
+
 // ==========================================
-// COMPONENTA PRINCIPALĂ
+// COMPONENTA BARA CAUTARE SI SORTARE (EXTRASĂ)
 // ==========================================
-function HomePage() {   
+export function SearchBar({ sortType, setSortType }) {
     const navigate = useNavigate();
-    const [notification, setNotification] = useState(null);
-    const [sortType, setSortType] = useState('default');
-    //variabile pentru search box
     const [searchTerm, setSearchTerm] = useState('');
     const [showResults, setShowResults] = useState(false);
     const searchRef = useRef(null);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -175,7 +181,101 @@ function HomePage() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []); 
+    }, []);
+
+    const filteredProducts = allProducts.filter((product) =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSearchProductClick = (product) => {
+        navigate(`/product/${product.id}`, { state: { product } });
+        setSearchTerm('');
+    };
+
+    return (
+        <div className="shortcuts-bar">
+            <div className="shortcut-links">
+                {shortcuts.map(shortcut => (
+                    <a key={shortcut.id} href={`#${shortcut.id}`} className="shortcut-link">
+                        {shortcut.name}
+                    </a>
+                ))}
+            </div>
+
+            <div className="search-container" ref={searchRef}>
+                <input
+                    type="text"
+                    className="product-search-input"
+                    placeholder="Caută produse..."
+                    value={searchTerm}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setShowResults(true);
+                    }}
+                />
+
+                {searchTerm && showResults && (
+                    <div className="search-results">
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className="search-result-item"
+                                    onClick={() => {
+                                        handleSearchProductClick(product);
+                                        setShowResults(false);
+                                    }}
+                                >
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+                                        className="search-result-img"
+                                        onError={(e) => {
+                                            e.target.src = 'https://via.placeholder.com/50?text=Img';
+                                        }}
+                                    />
+                                    <div>
+                                        <div className="search-result-title">{product.title}</div>
+                                        <div className="search-result-price">
+                                            {product.price.toFixed(2).replace('.', ',')} RON
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="search-no-results">Nu s-au găsit produse.</div>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            <div className="sort-container">
+                <label htmlFor="sort-dropdown" className="sort-label">Sortează:</label>
+                <select
+                    id="sort-dropdown"
+                    className="sort-dropdown"
+                    value={sortType}
+                    onChange={(e) => setSortType(e.target.value)}
+                >
+                    <option value="default">Implicit</option>
+                    <option value="alpha-asc">Alfabetic (A-Z)</option>
+                    <option value="price-asc">Preț: Crescător</option>
+                    <option value="price-desc">Preț: Descrescător</option>
+                </select>
+            </div>
+        </div>
+    );
+}
+
+
+// ==========================================
+// COMPONENTA PRINCIPALĂ
+// ==========================================
+function HomePage() {   
+    const navigate = useNavigate();
+    const [notification, setNotification] = useState(null);
+    const [sortType, setSortType] = useState('default');
+    
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('pc-garage-theme');
         if (savedTheme !== null) {
@@ -195,22 +295,6 @@ function HomePage() {
 
     const { cartCount, addToCart } = useCart(notify, null);
 
-    const allProducts = [
-        ...mockSystems,
-        ...mockProcessors,
-        ...mockGpus,
-        ...mockMotherboards
-    ];
-
-    const filteredProducts = allProducts.filter((product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const handleSearchProductClick = (product) => {
-        navigate(`/product/${product.id}`, { state: { product } });
-        setSearchTerm('');
-    };
-
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => {
             const newMode = !prevMode;
@@ -228,14 +312,10 @@ function HomePage() {
     const sortProducts = (products, type) => {
         const sortedArray = [...products];
         switch(type) {
-            case 'price-asc':
-                return sortedArray.sort((a, b) => a.price - b.price);
-            case 'price-desc':
-                return sortedArray.sort((a, b) => b.price - a.price);
-            case 'alpha-asc':
-                return sortedArray.sort((a, b) => a.title.localeCompare(b.title));
-            default:
-                return sortedArray;
+            case 'price-asc': return sortedArray.sort((a, b) => a.price - b.price);
+            case 'price-desc': return sortedArray.sort((a, b) => b.price - a.price);
+            case 'alpha-asc': return sortedArray.sort((a, b) => a.title.localeCompare(b.title));
+            default: return sortedArray;
         }
     };
 
@@ -253,22 +333,17 @@ function HomePage() {
                         onError={(e) => { e.target.src = 'https://via.placeholder.com/200?text=Fara+Imagine'; }}
                     />
                 </div>
-
                 <div className="rating-banner">
                     <span>👍</span> <span>👍</span> <span>👍</span>
                 </div>
-
                 <div className="product-title">{proc.title}</div>
-
                 <div className="product-price">
                     {proc.price.toFixed(2).replace('.', ',')} RON
                 </div>
-
                 <div className="product-installments">
                     4 rate fara dobanda, doar {proc.installments} RON
                 </div>
             </div>
-
             <button
                 className="add-to-cart-btn"
                 onClick={(e) => {
@@ -280,8 +355,8 @@ function HomePage() {
             </button>
         </div>
     );
+
     return (
-        
         <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, fontFamily: fontFamily }}>
             <div className='header-bar'>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -292,7 +367,6 @@ function HomePage() {
                     >
                         {isDarkMode ? '☀️' : '🌙'}
                     </button>
-
                     <select className="font-dropdown" value={fontFamily} onChange={handleFontChange} title="Alege fontul">
                         <option value="Arial, sans-serif">Arial (Default)</option>
                         <option value="'Roboto', sans-serif">Roboto</option>
@@ -301,87 +375,13 @@ function HomePage() {
                         <option value="'Poppins', sans-serif">Poppins</option>
                     </select>
                 </div>
-
                 <h1 style={{ ...ST.logo, fontSize: "60px" }} >Pc Garage</h1>
                 <ListaOp cartCount={cartCount} isDarkMode={isDarkMode} />
             </div>
 
-            <div className="shortcuts-bar">
-                <div className="shortcut-links">
-                    {shortcuts.map(shortcut => (
-                        <a key={shortcut.id} href={`#${shortcut.id}`} className="shortcut-link">
-                            {shortcut.name}
-                        </a>
-                    ))}
-                </div>
-
-                <div className="search-container"ref={searchRef}>
-                    <input
-                        type="text"
-                        className="product-search-input"
-                        placeholder="Caută produse..."
-                        value={searchTerm}
-                        onChange={(e) => {setSearchTerm(e.target.value)
-                                         setShowResults(true);
-                        }}
-                        
-                    />
-                    
-
-                    {searchTerm && showResults && (
-                        <div className="search-results">
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <div
-                                        key={product.id}
-                                        className="search-result-item"
-                                        onClick={() =>{ handleSearchProductClick(product)
-                                                        setShowResults(false);
-                                        }}
-                                    >
-                                        <img
-                                            src={product.image} 
-                                            alt={product.title}
-                                            className="search-result-img"
-                                            onError={(e) => {
-                                                e.target.src = 'https://via.placeholder.com/50?text=Img';
-                                            }}
-                                        />
-
-                                        <div>
-                                            <div className="search-result-title">{product.title}</div>
-                                            <div className="search-result-price">
-                                                {product.price.toFixed(2).replace('.', ',')} RON
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="search-no-results">
-                                    Nu s-au găsit produse.
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-
-                <div className="sort-container">
-                    <label htmlFor="sort-dropdown" className="sort-label">Sortează:</label>
-                    <select
-                        id="sort-dropdown"
-                        className="sort-dropdown"
-                        value={sortType}
-                        onChange={(e) => setSortType(e.target.value)}
-                    >
-                        <option value="default">Implicit</option>
-                        <option value="alpha-asc">Alfabetic (A-Z)</option>
-                        <option value="price-asc">Preț: Crescător</option>
-                        <option value="price-desc">Preț: Descrescător</option>
-                    </select>
-                </div>
-            </div>
-
-            {/* SECTIONS RESTORED: Render the mapped products to the screen */}
+            {/* APELĂM COMPONENTA EXTRASĂ AICI */}
+            <SearchBar sortType={sortType} setSortType={setSortType} />
+            
             <div className="main-content">
                 <section id="section-sisteme" className="product-section">
                     <h2>Sisteme Desktop PC</h2>
@@ -389,21 +389,18 @@ function HomePage() {
                         {sortProducts(mockSystems, sortType).map(renderProduct)}
                     </div>
                 </section>
-
                 <section id="section-procesoare" className="product-section">
                     <h2>Procesoare</h2>
                     <div className="product-grid">
                         {sortProducts(mockProcessors, sortType).map(renderProduct)}
                     </div>
                 </section>
-
                 <section id="section-placi-video" className="product-section">
                     <h2>Plăci Video</h2>
                     <div className="product-grid">
                         {sortProducts(mockGpus, sortType).map(renderProduct)}
                     </div>
                 </section>
-
                 <section id="section-placi-baza" className="product-section">
                     <h2>Plăci De Bază</h2>
                     <div className="product-grid">
@@ -411,8 +408,7 @@ function HomePage() {
                     </div>
                 </section>
             </div>
-
-            {/* Notifications Display */}
+            
             {notification && (
                 <div className={`notification-toast ${notification.type}`}>
                     {notification.msg}
@@ -426,18 +422,17 @@ function HomePage() {
 // ==========================================
 // COMPONENTA LISTA OPTIUNI
 // ==========================================
-
 function ListaOp({ cartCount, isDarkMode }) {
     const navigate = useNavigate();
-    
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleNavigation = (path, state = {}) => {
         navigate(path, state);
         setIsMenuOpen(false); 
     };
+
     return (
-        <div  style={{ position: 'relative', display: 'inline-block' }}>
+        <div style={{ position: 'relative', display: 'inline-block' }}>
             <button
                 style={{ ...ST.btn, padding: "10px 15px", fontSize: 16,  minWidth: '150px' }}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -460,37 +455,31 @@ function ListaOp({ cartCount, isDarkMode }) {
                     boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.5)', 
                     zIndex: 1000,
                     minWidth: '150px'
-
                 }}>
-                    
                     <button
                         style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
                         onClick={() => handleNavigation('/login')}
                     >
                         Log in
                     </button>
-                    
                     <button
                         style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
                         onClick={() => handleNavigation('/register')}
                     >
                         Register
                     </button>
-                    
                     <button
                         style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
                         onClick={() => handleNavigation('/service', { state: { isDarkMode } })}
                     >
                         🔧 Service
                     </button>
-                    
                     <button
                         style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
                         onClick={() => handleNavigation('/cart')}
                     >
                         🛒 Cos {cartCount > 0 && `(${cartCount})`}
                     </button>
-
                     <button
                         style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
                         onClick={() => handleNavigation('/adminpanel')}
@@ -502,11 +491,11 @@ function ListaOp({ cartCount, isDarkMode }) {
         </div>
     );
 }
-function Footer()
-{
+
+function Footer() {
     return(
         <div style={{...ST.footer, 
-            padding: "20px 40px",           
+            padding: "20px 40px",          
             display: "flex",               
             flexDirection: "row",          
             justifyContent: "space-between",
@@ -517,19 +506,15 @@ function Footer()
                 &copy; {new Date().getFullYear()} Pc Garage. Toate drepturile rezervate.
             </div>
             <div style={{ display:"flex", gap:"24px",alignItems: "center"}}>
-            <a
-                style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}
-            >
+            <a style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}>
                 ✉️ support@pcgarage.ro
             </a>
-            <a 
-                    
-                    style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}
-                >
-                    📞 0123 456 789
-                </a>
+            <a style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}>
+                📞 0123 456 789
+            </a>
             </div>
         </div>
     );
 }
+
 export default HomePage;
