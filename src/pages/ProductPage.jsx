@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../components/cart';
 import ST from '../styles/styles';
+import SiteHeader from '../components/layout/SiteHeader';
 import './ProductPage.css';
 
 function ProductPage() {
@@ -65,48 +66,14 @@ function ProductPage() {
     return (
         <div className={`product-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, minHeight: '100vh', fontFamily: fontFamily }}>
             
-            <div className='header-bar'>
-                {/* Partea stângă: Buton Înapoi + Buton Temă + Dropdown Font */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <button className="back-btn" onClick={() => navigate('/')}>← Înapoi</button>
-                    <button 
-                        className="theme-toggle-btn" 
-                        onClick={toggleTheme} 
-                        title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
-                    >
-                        {isDarkMode ? '☀️' : '🌙'}
-                    </button>
-                    <select className="font-dropdown" value={fontFamily} onChange={handleFontChange} title="Alege fontul">
-                        <option value="Arial, sans-serif">Arial (Default)</option>
-                        <option value="'Roboto', sans-serif">Roboto</option>
-                        <option value="'Open Sans', sans-serif">Open Sans</option>
-                        <option value="'Montserrat', sans-serif">Montserrat</option>
-                        <option value="'Poppins', sans-serif">Poppins</option>
-                    </select>
-                </div>
-                
-                {/* Centru: Titlul site-ului */}
-                 <h1 style={{ ...ST.logo, fontSize: "60px" }} >Pc Garage</h1>
-                
-                {/* Partea dreaptă: Log in, Register, Coș */}
-                <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 20px", fontSize: 16 }}
-                        onClick={() => navigate('/login')}
-                    >
-                        Log in
-                    </button>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 20px", fontSize: 16 }}
-                        onClick={() => navigate('/register')}
-                    >
-                        Register
-                    </button>
-                    <button style={{ ...ST.btn, padding: "10px 20px", fontSize: 14 }} onClick={() => navigate('/cart')}>
-                        🛒 Cos {cartCount > 0 && `(${cartCount})`}
-                    </button>
-                </div>
-            </div>
+            <SiteHeader
+                isDarkMode={isDarkMode}
+                onToggleTheme={toggleTheme}
+                fontFamily={fontFamily}
+                onFontChange={handleFontChange}
+                cartCount={cartCount}
+                showBackButton
+            />
 
             {notification && (
                 <div className={`notification ${notification.type}`}>

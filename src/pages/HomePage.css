@@ -57,16 +57,8 @@ body {
    STILURILE TALE GENERALE (PĂSTRATE INTACTE)
 ================================================== */
 
-.header-bar {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between; 
-    align-items: center;
-    padding: 20px 40px;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 9999;
+.product-section {
+    scroll-margin-top: 140px;
 }
 
 .home-title {
@@ -100,6 +92,39 @@ body {
     padding: 30px 40px;
     max-width: 1600px;
     margin: 0 auto;
+}
+
+.search-filter-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background-color: rgba(252, 98, 60, 0.15);
+    border: 1px solid rgba(252, 98, 60, 0.4);
+}
+
+.search-no-products {
+    text-align: center;
+    padding: 48px 20px;
+}
+
+.clear-search-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    background: linear-gradient(to right, #f12711, #fc623c);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.clear-search-btn:hover {
+    opacity: 0.9;
 }
 
 .category-section {
@@ -281,90 +306,6 @@ body {
 }
 
 
-/* --- BARA DE SHORTCUTURI --- */
-.shortcuts-bar {
-    background-color: #fc623c;
-    padding: 12px 40px;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    position: sticky; 
-    top: 0;
-    z-index: 1000;
-    border-bottom: 2px solid #f12711; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-
-.shortcut-links {
-    display: flex;
-    gap: 30px;
-}
-
-.shortcut-link {
-    text-decoration: none;
-    color: #1a1a1a;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: color 0.2s;
-}
-
-.shortcut-link:hover {
-    color: white; 
-}
-
-/* --- STILURI PENTRU DROPDOWN SORTARE --- */
-.sort-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.sort-label {
-    color: #1a1a1a;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-/* ==================================================
-   STILURI COMUNE DROPDOWN (FONT & SORTARE)
-================================================== */
-.font-dropdown,
-.sort-dropdown {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: white;
-    color: #1a1a1a;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-/* Tema Dark pentru Dropdown-uri */
-.dark-theme .font-dropdown,
-.dark-theme .sort-dropdown {
-    background-color: #2b2b2b;
-    color: white;
-    border-color: #555;
-}
-
-.font-dropdown:hover,
-.sort-dropdown:hover,
-.font-dropdown:focus,
-.sort-dropdown:focus {
-    border-color: #fc623c;
-    box-shadow: 0 0 5px rgba(252, 98, 60, 0.3); /* Un glow subtil portocaliu */
-}
-
-.sort-label {
-    color: #1a1a1a;
-    font-weight: bold;
-    font-size: 15px;
-}
-
 .spacer {
     height: 60px;
 }
@@ -385,24 +326,6 @@ body {
     .product-grid { 
         grid-template-columns: repeat(3, 1fr); 
     }
-    /* Trecem header-ul pe coloană ca să nu se mai lovească elementele */
-    .header-bar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px 20px;
-    }
-    /* Anulăm poziția absolută a titlului și îl punem primul sus */
-    .home-title {
-        position: relative; 
-        left: 0;
-        transform: none;
-        text-align: center;
-        order: -1; 
-    }
-    .header-bar > div {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
     .shortcuts-bar {
         flex-direction: column;
         gap: 15px;
@@ -420,23 +343,6 @@ body {
     .product-grid { 
         grid-template-columns: repeat(2, 1fr); 
     }
-    .header-bar {
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-    }
-    .home-title {
-        position: relative; /* Anulează suprapunerea forțată */
-        left: 0;
-        transform: none;
-        text-align: center;
-        order: -1; /* Pune titlul primul sus */
-    }
-    .header-bar > div {
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-    }
 }
 
 /* Telefoane standard */
@@ -447,93 +353,4 @@ body {
     .main-content { 
         padding: 20px; 
     }
-}
-
-.search-container {
-    position: relative;
-    width: 320px;
-    gap: 10px;
-    padding-right: 20%;
-}
-
-.product-search-input {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #555;
-    font-size: 15px;
-    outline: none;
-}
-
-.product-search-input:focus {
-    border-color: #ff6600;
-}
-
-.search-results {
-    position: absolute;
-    top: 45px;
-    left: 0;
-    right: 0;
-    max-height: 350px;
-    overflow-y: auto;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    z-index: 1000;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-}
-
-.search-result-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-}
-
-.search-result-item:hover {
-    background: #f2f2f2;
-}
-
-.search-result-img {
-    width: 45px;
-    height: 45px;
-    object-fit: contain;
-}
-
-.search-result-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #222;
-}
-
-.search-result-price {
-    font-size: 13px;
-    color: #ff6600;
-    margin-top: 4px;
-}
-
-.search-no-results {
-    padding: 12px;
-    color: #222;
-    font-size: 14px;
-}
-
-.dark-theme .search-results {
-    background: #1f1f1f;
-    border-color: #444;
-}
-
-.dark-theme .search-result-item {
-    border-bottom-color: #333;
-}
-
-.dark-theme .search-result-item:hover {
-    background: #2d2d2d;
-}
-
-.dark-theme .search-result-title,
-.dark-theme .search-no-results {
-    color: #ffffff;
 }

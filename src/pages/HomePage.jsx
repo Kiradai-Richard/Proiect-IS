@@ -1,281 +1,24 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './HomePage.css';
 import ST from '../styles/styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCart } from '../components/cart';
+import SiteHeader from '../components/layout/SiteHeader';
+import {
+    mockSystems,
+    mockProcessors,
+    mockGpus,
+    mockMotherboards,
+    matchesSearchQuery
+} from '../data/catalog';
 
-// ==========================================
-// DATE PROCESOARE
-// ==========================================
-const intelModels = [
-    { name: 'Core i3 12100F 3.3GHz', image: '/images/Corei312100F3.3GHz.png', price: 459.99 },
-    { name: 'Core i3 13100F 3.4GHz', image: '/images/Corei313100F3.4GHz.png', price: 599.99 },
-    { name: 'Core i5 12400F 2.5GHz', image: '/images/ProcesorIntelCorei512400F2.5GHzBox.png', price: 689.99 },
-    { name: 'Core i5 13400F 2.5GHz', image: '/images/Corei513400F2.5GHz.png', price: 1049.99 },
-    { name: 'Core i5 14400F 2.5GHz', image: '/images/Corei513400F2.5GHz.png', price: 1149.99 },
-    { name: 'Core i5 13600KF 3.5GHz', image: '/images/intel-i5-13600kf.png', price: 1429.99 },
-    { name: 'Core i7 13700K 3.4GHz', image: '/images/Corei713700K3.4GHz.png', price: 1999.99 },
-    { name: 'Core i7 14700K 3.4GHz', image: '/images/Corei714700K3.4GHz.png', price: 2099.99 },
-    { name: 'Core i9 14900KS 3.2GHz', image: '/images/Corei914900KS3.2GHz.png', price: 3299.99 },
-    { name: 'Core Ultra 5 245K 4.2GHz', image: '/images/CoreUltra5245K4.2GHz.png', price: 1549.99 }
-];
-
-const amdModels = [
-    { name: 'Ryzen 5 5500 3.6GHz', image: '/images/ProcesorAMDRyzen555003.6GHz Box.png', price: 429.99 },
-    { name: 'Ryzen 5 5600 3.5GHz', image: '/images/ProcesorAMDRyzen556003.5GHzBox.png', price: 650.99 },
-    { name: 'Ryzen 5 5600X 3.7GHz', image: '/images/ProcesorAMDRyzen556003.5GHzBox.png', price: 790.99 },
-    { name: 'Ryzen 5 7600X 4.7GHz', image: '/images/Ryzen57600X4.7GHz.png', price: 1150.99 },
-    { name: 'Ryzen 7 5700X 3.4GHz', image: '/images/Ryzen75700X3.4GHz.png', price: 990.99 },
-    { name: 'Ryzen 7 5800X3D 3.4GHz', image: '/images/Ryzen75800X3D3.4GHz.png', price: 1450.99 },
-    { name: 'Ryzen 7 7700 3.8GHz', image: '/images/Ryzen777003.8GHz.png', price: 1550.99 },
-    { name: 'Ryzen 7 7700X 4.5GHz', image: '/images/Ryzen77700X4.5GHz.png', price: 1690.99 },
-    { name: 'Ryzen 7 7800X3D 4.2GHz', image: '/images/Ryzen77800X3D4.2GHz.png', price: 1999.99 },
-    { name: 'Ryzen 9 7950X3D 4.2GHz', image: '/images/Ryzen97950X3D4.2GHz.png', price: 3100.99 }
-];
-
-const mockProcessors = Array.from({ length: 20 }, (_, index) => {
-    const isIntel = index % 2 === 0;
-    const modelIndex = Math.floor(index / 2);
-    let productData;
-
-    if (isIntel) {
-        productData = intelModels[modelIndex % intelModels.length];
-        return {
-            id: 'cpu-' + index,
-            title: `Procesor Intel ${productData.name} Box`,
-            price: productData.price,
-            installments: Math.floor(productData.price / 4),
-            image: productData.image
-        };
-    } else {
-        productData = amdModels[modelIndex % amdModels.length];
-        return {
-            id: 'cpu-' + index,
-            title: `Procesor AMD ${productData.name} Box`,
-            price: productData.price,
-            installments: Math.floor(productData.price / 4),
-            image: productData.image
-        };
-    }
-});
-
-// ==========================================
-// DATE PLĂCI VIDEO
-// ==========================================
-const nvidiaModels = [
-    { name: 'GeForce RTX 3060 12GB', image: '/images/placi_vid/GeForceRTX306012GB.png', price: 1499.99 },
-    { name: 'GeForce RTX 4060 8GB', image: '/images/placi_vid/GeForceRTX40608GB.png', price: 1649.99 },
-    { name: 'GeForce RTX 4070 SUPER 12GB', image: '/images/placi_vid/GeForceRTX4070SUPER12GB.png', price: 3299.99 },
-    { name: 'GeForce RTX 4080 SUPER 16GB', image: '/images/placi_vid/GeForceRTX4080SUPER16GB.png', price: 5499.99 },
-    { name: 'GeForce RTX 4090 24GB', image: '/images/placi_vid/GeForceRTX409024GB.png', price: 9999.99 }
-];
-
-const amdGpuModels = [
-    { name: 'Radeon RX 6600 8GB', image: '/images/placi_vid/RadeonRX66008GB.png', price: 1099.99 },
-    { name: 'Radeon RX 7600 8GB', image: '/images/placi_vid/RadeonRX76008GB.png', price: 1449.99 },
-    { name: 'Radeon RX 7700 XT 12GB', image: '/images/placi_vid/RadeonRX7700XT12GB.png', price: 2399.99 },
-    { name: 'Radeon RX 7800 XT 16GB', image: '/images/placi_vid/RadeonRX7800XT16GB.png', price: 2799.99 },
-    { name: 'Radeon RX 7900 XTX 24GB', image: '/images/placi_vid/RadeonRX7900XTX24GB.png', price: 5199.99 }
-];
-
-const mockGpus = Array.from({ length: 10 }, (_, index) => {
-    const isNvidia = index % 2 === 0;
-    const modelIndex = Math.floor(index / 2);
-    let productData;
-
-    if (isNvidia) {
-        productData = nvidiaModels[modelIndex % nvidiaModels.length];
-        return {
-            id: 'gpu-nv-' + index,
-            title: `Placa Video NVIDIA ${productData.name}`,
-            price: productData.price,
-            installments: Math.floor(productData.price / 4),
-            image: productData.image
-        };
-    } else {
-        productData = amdGpuModels[modelIndex % amdGpuModels.length];
-        return {
-            id: 'gpu-amd-' + index,
-            title: `Placa Video AMD ${productData.name}`,
-            price: productData.price,
-            installments: Math.floor(productData.price / 4),
-            image: productData.image
-        };
-    }
-});
-
-// ==========================================
-// DATE PLĂCI DE BAZĂ
-// ==========================================
-const motherboardModels = [
-    { name: 'GIGABYTE B650 EAGLE AX', image: '/images/placi_baza/GIGABYTEB650EAGLEAX.png', price: 799.99 },
-    { name: 'ASUS TUF GAMING B550-PLUS', image: '/images/placi_baza/ASUSTUFGAMINGB550-PLUS.png', price: 659.99 },
-    { name: 'MSI MAG Z790 TOMAHAWK WIFI', image: '/images/placi_baza/MSIMAGZ790TOMAHAWKWIFI.png', price: 1399.99 },
-    { name: 'ASUS ROG STRIX B760-F GAMING', image: '/images/placi_baza/ASUSROGSTRIXB760-FGAMING.png', price: 1099.99 },
-    { name: 'GIGABYTE B760M DS3H', image: '/images/placi_baza/GIGABYTEB760MDS3H.png', price: 549.99 }
-];
-const mockMotherboards = motherboardModels.map((productData, index) => ({
-    id: 'mb-' + index,
-    title: `Placa de baza ${productData.name}`,
-    price: productData.price,
-    installments: Math.floor(productData.price / 4),
-    image: productData.image
-}));
-
-// ==========================================
-// DATE SISTEME PRE-BUILD
-// ==========================================
-const pcSystemsModels = [
-    { name: 'PC Gaming ZMEU Prime', image: '/images/sisteme/zmeu.png', price: 3499.99 },
-    { name: 'PC Gaming BALAUR Epic MaxPlus', image: '/images/sisteme/balaur.png', price: 4299.99 },
-    { name: 'PC Gaming DRAGON Legendar MaxPlus', image: '/images/sisteme/dragon.png', price: 6199.99 },
-    { name: 'PC Gaming Arkay', image: '/images/sisteme/arkay.png', price: 3599.99 },
-    { name: 'PC Gaming Sorcerer', image: '/images/sisteme/sorcerer.png', price: 5499.99 },
-    { name: 'PC Gaming Serpent V2', image: '/images/sisteme/serpent-v2.png', price: 4199.99 },
-    { name: 'PC Gaming Helix', image: '/images/sisteme/helix.png', price: 6499.99 },
-    { name: 'PC Gaming Corvus', image: '/images/sisteme/corvus.png', price: 1499.99 },
-    { name: 'PC Gaming Cerberus Powered by ASUS', image: '/images/sisteme/cerberus.png', price: 7999.99 },
-    { name: 'PC Gaming Viking Intel', image: '/images/sisteme/viking-intel.png', price: 2199.99 }
-];
-
-const mockSystems = pcSystemsModels.map((productData, index) => ({
-    id: 'sys-' + index,
-    title: productData.name,
-    price: productData.price,
-    installments: Math.floor(productData.price / 4),
-    image: productData.image
-}));
-
-const shortcuts = [
-    { name: 'Sisteme Desktop PC', id: 'section-sisteme' },
-    { name: 'Procesoare', id: 'section-procesoare' },
-    { name: 'Plăci Video', id: 'section-placi-video' },
-    { name: 'Plăci De Bază', id: 'section-placi-baza' }
-];
-
-// Toate produsele pentru SearchBar
-const allProducts = [
-    ...mockSystems,
-    ...mockProcessors,
-    ...mockGpus,
-    ...mockMotherboards
-];
-
-// ==========================================
-// COMPONENTA BARA CAUTARE SI SORTARE (EXTRASĂ)
-// ==========================================
-export function SearchBar({ sortType, setSortType }) {
+function HomePage() {
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showResults, setShowResults] = useState(false);
-    const searchRef = useRef(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (searchRef.current && !searchRef.current.contains(event.target)) {
-                setShowResults(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const filteredProducts = allProducts.filter((product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const handleSearchProductClick = (product) => {
-        navigate(`/product/${product.id}`, { state: { product } });
-        setSearchTerm('');
-    };
-
-    return (
-        <div className="shortcuts-bar">
-            <div className="shortcut-links">
-                {shortcuts.map(shortcut => (
-                    <a key={shortcut.id} href={`#${shortcut.id}`} className="shortcut-link">
-                        {shortcut.name}
-                    </a>
-                ))}
-            </div>
-
-            <div className="search-container" ref={searchRef}>
-                <input
-                    type="text"
-                    className="product-search-input"
-                    placeholder="Caută produse..."
-                    value={searchTerm}
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value);
-                        setShowResults(true);
-                    }}
-                />
-
-                {searchTerm && showResults && (
-                    <div className="search-results">
-                        {filteredProducts.length > 0 ? (
-                            filteredProducts.map((product) => (
-                                <div
-                                    key={product.id}
-                                    className="search-result-item"
-                                    onClick={() => {
-                                        handleSearchProductClick(product);
-                                        setShowResults(false);
-                                    }}
-                                >
-                                    <img
-                                        src={product.image}
-                                        alt={product.title}
-                                        className="search-result-img"
-                                        onError={(e) => {
-                                            e.target.src = 'https://via.placeholder.com/50?text=Img';
-                                        }}
-                                    />
-                                    <div>
-                                        <div className="search-result-title">{product.title}</div>
-                                        <div className="search-result-price">
-                                            {product.price.toFixed(2).replace('.', ',')} RON
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="search-no-results">Nu s-au găsit produse.</div>
-                        )}
-                    </div>
-                )}
-            </div>
-
-            <div className="sort-container">
-                <label htmlFor="sort-dropdown" className="sort-label">Sortează:</label>
-                <select
-                    id="sort-dropdown"
-                    className="sort-dropdown"
-                    value={sortType}
-                    onChange={(e) => setSortType(e.target.value)}
-                >
-                    <option value="default">Implicit</option>
-                    <option value="alpha-asc">Alfabetic (A-Z)</option>
-                    <option value="price-asc">Preț: Crescător</option>
-                    <option value="price-desc">Preț: Descrescător</option>
-                </select>
-            </div>
-        </div>
-    );
-}
-
-
-// ==========================================
-// COMPONENTA PRINCIPALĂ
-// ==========================================
-function HomePage() {   
-    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const pageQuery = searchParams.get('q') || '';
     const [notification, setNotification] = useState(null);
     const [sortType, setSortType] = useState('default');
-    
+
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('pc-garage-theme');
         if (savedTheme !== null) {
@@ -288,7 +31,15 @@ function HomePage() {
         return localStorage.getItem('pc-garage-font') || 'Arial, sans-serif';
     });
 
-    const notify = useCallback((msg, type = "success") => {
+    useEffect(() => {
+        const sectionId = window.location.hash.replace('#', '');
+        if (!sectionId) return;
+        requestAnimationFrame(() => {
+            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+        });
+    }, []);
+
+    const notify = useCallback((msg, type = 'success') => {
         setNotification({ msg, type });
         setTimeout(() => setNotification(null), 3000);
     }, []);
@@ -311,13 +62,34 @@ function HomePage() {
 
     const sortProducts = (products, type) => {
         const sortedArray = [...products];
-        switch(type) {
+        switch (type) {
             case 'price-asc': return sortedArray.sort((a, b) => a.price - b.price);
             case 'price-desc': return sortedArray.sort((a, b) => b.price - a.price);
             case 'alpha-asc': return sortedArray.sort((a, b) => a.title.localeCompare(b.title));
             default: return sortedArray;
         }
     };
+
+    const filterBySearch = (products) =>
+        products.filter((product) => matchesSearchQuery(product, pageQuery));
+
+    const clearPageSearch = () => setSearchParams({});
+
+    const sections = [
+        { id: 'section-sisteme', title: 'Sisteme Desktop PC', products: mockSystems },
+        { id: 'section-procesoare', title: 'Procesoare', products: mockProcessors },
+        { id: 'section-placi-video', title: 'Plăci Video', products: mockGpus },
+        { id: 'section-placi-baza', title: 'Plăci De Bază', products: mockMotherboards }
+    ];
+
+    const visibleSections = sections
+        .map((section) => ({
+            ...section,
+            products: sortProducts(filterBySearch(section.products), sortType)
+        }))
+        .filter((section) => section.products.length > 0);
+
+    const totalVisible = visibleSections.reduce((sum, s) => sum + s.products.length, 0);
 
     const renderProduct = (proc) => (
         <div key={proc.id} className="product-card">
@@ -358,57 +130,47 @@ function HomePage() {
 
     return (
         <div className={`home-page-container ${isDarkMode ? 'dark-theme' : 'light-theme'}`} style={{ ...ST.app, fontFamily: fontFamily }}>
-            <div className='header-bar'>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <button
-                        className="theme-toggle-btn"
-                        onClick={toggleTheme}
-                        title={isDarkMode ? "Comută la modul luminos" : "Comută la modul întunecat"}
-                    >
-                        {isDarkMode ? '☀️' : '🌙'}
-                    </button>
-                    <select className="font-dropdown" value={fontFamily} onChange={handleFontChange} title="Alege fontul">
-                        <option value="Arial, sans-serif">Arial (Default)</option>
-                        <option value="'Roboto', sans-serif">Roboto</option>
-                        <option value="'Open Sans', sans-serif">Open Sans</option>
-                        <option value="'Montserrat', sans-serif">Montserrat</option>
-                        <option value="'Poppins', sans-serif">Poppins</option>
-                    </select>
-                </div>
-                <h1 style={{ ...ST.logo, fontSize: "60px" }} >Pc Garage</h1>
-                <ListaOp cartCount={cartCount} isDarkMode={isDarkMode} />
+            <SiteHeader
+                isDarkMode={isDarkMode}
+                onToggleTheme={toggleTheme}
+                fontFamily={fontFamily}
+                onFontChange={handleFontChange}
+                cartCount={cartCount}
+                sortType={sortType}
+                setSortType={setSortType}
+            />
+
+            <div className="main-content">
+                {pageQuery && (
+                    <div className="search-filter-banner">
+                        <span>
+                            Rezultate pentru: <strong>&quot;{pageQuery}&quot;</strong> ({totalVisible} produse)
+                        </span>
+                        <button type="button" className="clear-search-btn" onClick={clearPageSearch}>
+                            Șterge filtrul
+                        </button>
+                    </div>
+                )}
+
+                {pageQuery && totalVisible === 0 ? (
+                    <div className="search-no-products">
+                        <p>Nu s-au găsit produse pentru &quot;{pageQuery}&quot;.</p>
+                        <button type="button" className="clear-search-btn" onClick={clearPageSearch}>
+                            Afișează toate produsele
+                        </button>
+                    </div>
+                ) : (
+                    visibleSections.map((section) => (
+                        <section key={section.id} id={section.id} className="product-section">
+                            <h2>{section.title}</h2>
+                            <div className="product-grid">
+                                {section.products.map(renderProduct)}
+                            </div>
+                        </section>
+                    ))
+                )}
             </div>
 
-            {/* APELĂM COMPONENTA EXTRASĂ AICI */}
-            <SearchBar sortType={sortType} setSortType={setSortType} />
-            
-            <div className="main-content">
-                <section id="section-sisteme" className="product-section">
-                    <h2>Sisteme Desktop PC</h2>
-                    <div className="product-grid">
-                        {sortProducts(mockSystems, sortType).map(renderProduct)}
-                    </div>
-                </section>
-                <section id="section-procesoare" className="product-section">
-                    <h2>Procesoare</h2>
-                    <div className="product-grid">
-                        {sortProducts(mockProcessors, sortType).map(renderProduct)}
-                    </div>
-                </section>
-                <section id="section-placi-video" className="product-section">
-                    <h2>Plăci Video</h2>
-                    <div className="product-grid">
-                        {sortProducts(mockGpus, sortType).map(renderProduct)}
-                    </div>
-                </section>
-                <section id="section-placi-baza" className="product-section">
-                    <h2>Plăci De Bază</h2>
-                    <div className="product-grid">
-                        {sortProducts(mockMotherboards, sortType).map(renderProduct)}
-                    </div>
-                </section>
-            </div>
-            
             {notification && (
                 <div className={`notification-toast ${notification.type}`}>
                     {notification.msg}
@@ -419,99 +181,28 @@ function HomePage() {
     );
 }
 
-// ==========================================
-// COMPONENTA LISTA OPTIUNI
-// ==========================================
-function ListaOp({ cartCount, isDarkMode }) {
-    const navigate = useNavigate();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const handleNavigation = (path, state = {}) => {
-        navigate(path, state);
-        setIsMenuOpen(false); 
-    };
-
-    return (
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-            <button
-                style={{ ...ST.btn, padding: "10px 15px", fontSize: 16,  minWidth: '150px' }}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-                ☰ Meniu 
-            </button>
-            {isMenuOpen && (
-                <div style={{
-                    position: 'absolute',
-                    top: '100%',       
-                    left: '50%',                     
-                    transform: 'translateX(-50%)',   
-                     marginTop: '10px', 
-                    display: 'flex',
-                    backgroundColor: isDarkMode?'rgba(0, 0, 0, 0.5)':'rgba(255, 252, 252, 0.5)' ,
-                    flexDirection: 'column',
-                    gap: '10px',
-                    padding: '15px',
-                    borderRadius: '8px',
-                    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.5)', 
-                    zIndex: 1000,
-                    minWidth: '150px'
-                }}>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
-                        onClick={() => handleNavigation('/login')}
-                    >
-                        Log in
-                    </button>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
-                        onClick={() => handleNavigation('/register')}
-                    >
-                        Register
-                    </button>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
-                        onClick={() => handleNavigation('/service', { state: { isDarkMode } })}
-                    >
-                        🔧 Service
-                    </button>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
-                        onClick={() => handleNavigation('/cart')}
-                    >
-                        🛒 Cos {cartCount > 0 && `(${cartCount})`}
-                    </button>
-                    <button
-                        style={{ ...ST.btn, padding: "10px 15px", fontSize: 14 }}
-                        onClick={() => handleNavigation('/adminpanel')}
-                    >
-                        Admin Panel
-                    </button>
-                </div>
-            )}
-        </div>
-    );
-}
-
 function Footer() {
-    return(
-        <div style={{...ST.footer, 
-            padding: "20px 40px",          
-            display: "flex",               
-            flexDirection: "row",          
-            justifyContent: "space-between",
-            alignItems: "center",           
-            flexWrap: "wrap",              
-            gap: "20px"}}>
-            <div style= {{ color: "#888", fontSize: "14px" }}>
+    return (
+        <div style={{
+            ...ST.footer,
+            padding: '20px 40px',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '20px'
+        }}>
+            <div style={{ color: '#888', fontSize: '14px' }}>
                 &copy; {new Date().getFullYear()} Pc Garage. Toate drepturile rezervate.
             </div>
-            <div style={{ display:"flex", gap:"24px",alignItems: "center"}}>
-            <a style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}>
-                ✉️ support@pcgarage.ro
-            </a>
-            <a style={{ color: "#e0e0e0", textDecoration: "none", fontSize: "14px", transition: "color 0.2s" }}>
-                📞 0123 456 789
-            </a>
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                <a style={{ color: '#e0e0e0', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}>
+                    ✉️ support@pcgarage.ro
+                </a>
+                <a style={{ color: '#e0e0e0', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}>
+                    📞 0123 456 789
+                </a>
             </div>
         </div>
     );

@@ -17,7 +17,7 @@ const S = {
     errorMsg: { color: '#e74c3c', fontSize: 12, fontWeight: 700, marginTop: 4 },
     inputError: { borderColor: '#e74c3c' },
     charCount: { fontSize: 12, color: '#555', textAlign: 'right', marginTop: 2 },
-    submitBtn: { ...ST.btn, padding: '14px 0', width: '100%', fontSize: 17, borderRadius: 8 },
+    submitBtn: { ...ST.btn, padding: '14px 0', width: '90%', fontSize: 17, borderRadius: 8 },
     // Succes
     successWrap: { ...ST.app, display: 'flex', justifyContent: 'center', alignItems: 'center' },
     successCard: { ...ST.mContent, textAlign: 'center', maxWidth: 520, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, margin: '60px auto' },
