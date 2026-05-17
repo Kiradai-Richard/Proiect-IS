@@ -11,6 +11,8 @@ import ResetPassword from "./components/auth/ResetPassword";
 import ServicePage from './components/service/ServicePage';
 import AdminPanel from "./components/admin/AdminPage";
 
+import ReactGA from 'react-ga4';
+ReactGA.initialize('G-M5LZ91NR94');
 const root = ReactDom.createRoot(document.getElementById('root'));
 
 root.render(
