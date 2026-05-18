@@ -32,10 +32,10 @@
 }
 
 .login-page .text {
-    background: linear-gradient(135deg, #FF6B35, #FF3333);
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: #FF6B35;
+    color: #8B5CF6;
     font-size: 48px;
     font-weight: 900;
     letter-spacing: -1px;
@@ -44,7 +44,7 @@
 .login-page .underline {
     width: 70px;
     height: 5px;
-    background: linear-gradient(135deg, #FF6B35, #e94560);
+    background: linear-gradient(135deg, #8B5CF6, #EC4899);
     border-radius: 999px;
     box-shadow: 0 0 18px rgba(255, 107, 53, 0.35);
 }
@@ -69,7 +69,7 @@
 }
 
 .login-page .input:focus-within {
-    border-color: #FF6B35;
+    border-color: #8B5CF6;
     box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.12);
     transform: translateY(-1px);
 }
@@ -117,7 +117,7 @@
     width: 17px;
     height: 17px;
     cursor: pointer;
-    accent-color: #FF6B35;
+    accent-color: #8B5CF6;
 }
 
 .login-page .forgot-password {
@@ -128,14 +128,14 @@
 }
 
 .login-page .forgot-password span {
-    color: #FF6B35;
+    color: #8B5CF6;
     cursor: pointer;
     font-weight: 700;
     margin-left: 4px;
 }
 
 .login-page .forgot-password span:hover {
-    color: #e94560;
+    color: #EC4899;
     text-decoration: underline;
 }
 
@@ -153,7 +153,7 @@
     width: 220px;
     height: 58px;
     color: #ffffff;
-    background: linear-gradient(135deg, #FF6B35, #e94560);
+    background: linear-gradient(135deg, #8B5CF6, #EC4899);
     border-radius: 8px;
     font-size: 17px;
     font-weight: 800;
@@ -205,7 +205,7 @@
 .login-page .back-home {
     text-align: center;
     margin-top: 22px;
-    color: #FF6B35;
+    color: #8B5CF6;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
@@ -213,7 +213,7 @@
 }
 
 .login-page .back-home:hover {
-    color: #e94560;
+    color: #EC4899;
     text-decoration: underline;
     transform: translateY(-1px);
 }
@@ -239,7 +239,7 @@
 
 .auth-theme-toggle-btn:hover {
     transform: translateY(-2px);
-    border-color: #FF6B35;
+    border-color: #8B5CF6;
     box-shadow: 0 0 14px rgba(255, 107, 53, 0.3);
 }
 

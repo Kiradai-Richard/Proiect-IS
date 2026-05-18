@@ -76,10 +76,10 @@ function HomePage() {
     const clearPageSearch = () => setSearchParams({});
 
     const sections = [
-        { id: 'section-sisteme', title: 'Sisteme Desktop PC', products: mockSystems },
-        { id: 'section-procesoare', title: 'Procesoare', products: mockProcessors },
-        { id: 'section-placi-video', title: 'Plăci Video', products: mockGpus },
-        { id: 'section-placi-baza', title: 'Plăci De Bază', products: mockMotherboards }
+        { id: 'section-sisteme', title: 'Rochii', products: mockSystems },
+        { id: 'section-procesoare', title: 'Tricouri', products: mockProcessors },
+        { id: 'section-placi-video', title: 'Pantaloni & Jeans', products: mockGpus },
+        { id: 'section-placi-baza', title: 'Geci', products: mockMotherboards }
     ];
 
     const visibleSections = sections
@@ -194,11 +194,11 @@ function Footer() {
             gap: '20px'
         }}>
             <div style={{ color: '#888', fontSize: '14px' }}>
-                &copy; {new Date().getFullYear()} Pc Garage. Toate drepturile rezervate.
+                &copy; {new Date().getFullYear()} StyleHub. Toate drepturile rezervate.
             </div>
             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                 <a style={{ color: '#e0e0e0', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}>
-                    ✉️ support@pcgarage.ro
+                    ✉️ support@stylehub.ro
                 </a>
                 <a style={{ color: '#e0e0e0', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}>
                     📞 0123 456 789

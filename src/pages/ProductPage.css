@@ -103,8 +103,8 @@
 
 .favorite-btn {
     background-color: transparent;
-    border: 2px solid #0066cc;
-    color: #0066cc;
+    border: 2px solid #8B5CF6;
+    color: #8B5CF6;
 }
 .favorite-btn:hover { background-color: rgba(0, 102, 204, 0.1); }
 
@@ -144,7 +144,7 @@
 .submit-review-btn {
     align-self: flex-start;
     padding: 12px 24px;
-    background-color: #fc623c; /* Culoarea ta de accent din bara de sus */
+    background-color: #8B5CF6; /* Culoarea ta de accent din bara de sus */
     color: white;
     border: none;
     border-radius: 6px;
@@ -177,11 +177,11 @@
 .dark-theme .product-page-title { color: #fff; }
 .dark-theme .action-box { background-color: #2b2b2b; border: 1px solid #333; }
 .dark-theme .product-page-price { color: #ffffff; }
-.dark-theme .rate-info-box { color: #e53935; }
+.dark-theme .rate-info-box { color: #EC4899; }
 .dark-theme .reviews-section { border-top: 1px solid #444; }
 .dark-theme .review-form textarea { background-color: #1a1a1a; color: white; border: 1px solid #444; }
 .dark-theme .review-item { background-color: #2b2b2b; border: 1px solid #333;}
-.dark-theme .favorite-btn { border-color: #4a90e2; color: #4a90e2; }
+.dark-theme .favorite-btn { border-color: #EC4899; color: #EC4899; }
 
 /* Light Theme cu !important (pentru a suprascrie eventuale stiluri React) */
 .light-theme {
@@ -192,8 +192,8 @@
 .light-theme .home-title { color: #000000 !important; }
 .light-theme .product-page-title { color: #1a1a1a; }
 .light-theme .action-box { background-color: #f1f1f1; border: 1px solid #e0e0e0; }
-.light-theme .product-page-price { color: #d32f2f; }
-.light-theme .rate-info-box { color: #d32f2f; }
+.light-theme .product-page-price { color: #EC4899; }
+.light-theme .rate-info-box { color: #EC4899; }
 .light-theme .reviews-section { border-top: 1px solid #e0e0e0; }
 .light-theme .review-form textarea { background-color: #ffffff; color: #1a1a1a; border: 1px solid #ccc; }
 .light-theme .review-item { background-color: #f8f8f8; border: 1px solid #e0e0e0;}
@@ -219,7 +219,7 @@
 }
 
 .font-dropdown:hover {
-    border-color: #fc623c;
+    border-color: #8B5CF6;
 }
 
 /* ==================================================

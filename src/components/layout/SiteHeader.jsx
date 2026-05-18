@@ -47,7 +47,7 @@ function HeaderMenu({ cartCount, isDarkMode }) {
                         Register
                     </button>
                     <button style={{ ...ST.btn, padding: '10px 15px', fontSize: 14 }} onClick={() => handleNavigation('/service', { state: { isDarkMode } })}>
-                        🔧 Service
+                        ↩️ Retur / Schimb
                     </button>
                     <button style={{ ...ST.btn, padding: '10px 15px', fontSize: 14 }} onClick={() => handleNavigation('/cart')}>
                         🛒 Cos {cartCount > 0 && `(${cartCount})`}
@@ -146,7 +146,7 @@ function StoreNavBar({ sortType, setSortType, showSort }) {
                 <input
                     type="text"
                     className="product-search-input"
-                    placeholder="Caută produse..."
+                    placeholder="Caută haine..."
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
@@ -250,7 +250,7 @@ function SiteHeader({
                     style={{ ...ST.logo, fontSize: '60px' }}
                     onClick={() => navigate('/')}
                 >
-                    Pc Garage
+                    StyleHub
                 </button>
 
                 <HeaderMenu cartCount={cartCount} isDarkMode={isDarkMode} />

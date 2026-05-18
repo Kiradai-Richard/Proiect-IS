@@ -6,29 +6,29 @@ import { useNavigate } from 'react-router-dom';
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 const MOCK_EMPLOYEES = [
-    { id: 1, name: "Andrei Popescu",  email: "andrei@pcg.ro", role: "senior", phone: "0722 111 222", createdAt: "2024-01-10" },
-    { id: 2, name: "Maria Ionescu",   email: "maria@pcg.ro",  role: "junior", phone: "0733 222 333", createdAt: "2024-03-15" },
-    { id: 3, name: "Vlad Dumitrescu", email: "vlad@pcg.ro",   role: "senior", phone: "0744 333 444", createdAt: "2023-11-05" },
-    { id: 4, name: "Elena Constantin",email: "elena@pcg.ro",  role: "junior", phone: "0755 444 555", createdAt: "2024-05-20" },
+    { id: 1, name: "Andrei Popescu",  email: "andrei@stylehub.ro", role: "senior", phone: "0722 111 222", createdAt: "2024-01-10" },
+    { id: 2, name: "Maria Ionescu",   email: "maria@stylehub.ro",  role: "junior", phone: "0733 222 333", createdAt: "2024-03-15" },
+    { id: 3, name: "Vlad Dumitrescu", email: "vlad@stylehub.ro",   role: "senior", phone: "0744 333 444", createdAt: "2023-11-05" },
+    { id: 4, name: "Elena Constantin",email: "elena@stylehub.ro",  role: "junior", phone: "0755 444 555", createdAt: "2024-05-20" },
 ];
 
 const MOCK_ORDERS = [
-    { id: "ORD-001", client: "Ion Popa",       product: "RTX 4070 Ti",         amount: 3200, status: "pending",    assignedTo: null, createdAt: "2025-05-10" },
-    { id: "ORD-002", client: "Gheorghe Marin", product: "Intel i9-14900K",     amount: 2100, status: "processing", assignedTo: 1,    createdAt: "2025-05-09" },
-    { id: "ORD-003", client: "Ana Radu",       product: "Corsair RM1000x",     amount: 780,  status: "completed",  assignedTo: 2,    createdAt: "2025-05-08" },
-    { id: "ORD-004", client: "Mihai Stan",     product: "Samsung 990 Pro 2TB", amount: 560,  status: "cancelled",  assignedTo: 3,    createdAt: "2025-05-07" },
+    { id: "ORD-001", client: "Ion Popa",       product: "Rochie Eleganta Neagra",  amount: 299,  status: "pending",    assignedTo: null, createdAt: "2025-05-10" },
+    { id: "ORD-002", client: "Gheorghe Marin", product: "Geaca Piele Eco Neagra",  amount: 499,  status: "processing", assignedTo: 1,    createdAt: "2025-05-09" },
+    { id: "ORD-003", client: "Ana Radu",       product: "Jeans Mom Fit Vintage",   amount: 219,  status: "completed",  assignedTo: 2,    createdAt: "2025-05-08" },
+    { id: "ORD-004", client: "Mihai Stan",     product: "Tricou Merino Wool Navy", amount: 149,  status: "cancelled",  assignedTo: 3,    createdAt: "2025-05-07" },
 ];
 
 const MOCK_SERVICES = [
-    { id: "SRV-001", client: "Bogdan Luca",  description: "Curatare si repastare PC",       status: "pending",    assignedTo: null, createdAt: "2025-05-11" },
-    { id: "SRV-002", client: "Daniela Popa", description: "Diagnosticare sistem",           status: "processing", assignedTo: 2,    createdAt: "2025-05-10" },
-    { id: "SRV-003", client: "Radu Nica",    description: "Inlocuire pasta termala laptop", status: "completed",  assignedTo: 1,    createdAt: "2025-05-09" },
+    { id: "SRV-001", client: "Bogdan Luca",  description: "Retur - marimea nu se potriveste",   status: "pending",    assignedTo: null, createdAt: "2025-05-11" },
+    { id: "SRV-002", client: "Daniela Popa", description: "Schimb produs - culoare gresita",    status: "processing", assignedTo: 2,    createdAt: "2025-05-10" },
+    { id: "SRV-003", client: "Radu Nica",    description: "Retur - produs deteriorat la livrare", status: "completed", assignedTo: 1,   createdAt: "2025-05-09" },
 ];
 
 const MOCK_PRODUCTS = [
-    { id: 1, name: "RTX 4070 Ti Super",    category: "GPU", price: 3400, stock: 5,  addedBy: 1 },
-    { id: 2, name: "Intel Core i9-14900K", category: "CPU", price: 2100, stock: 8,  addedBy: 3 },
-    { id: 3, name: "Corsair DDR5 32GB",    category: "RAM", price: 420,  stock: 15, addedBy: 1 },
+    { id: 1, name: "Rochie Seara Argintie",   category: "Rochii",   price: 449, stock: 5,  addedBy: 1 },
+    { id: 2, name: "Geaca Piele Eco Neagra",  category: "Geci",     price: 499, stock: 8,  addedBy: 3 },
+    { id: 3, name: "Jeans Mom Fit Vintage",   category: "Pantaloni", price: 219, stock: 15, addedBy: 1 },
 ];
 
 const ORDER_STATUSES   = ["pending", "processing", "completed", "cancelled"];
@@ -80,7 +80,7 @@ function AddEmployeeModal({ onClose, onAdd }) {
                 <label style={ST.label}>Nume complet *</label>
                 <input style={ST.input} value={form.name}     onChange={e => set("name", e.target.value)}     placeholder="ex: Ion Popescu" />
                 <label style={ST.label}>Email *</label>
-                <input style={ST.input} type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="ion@pcg.ro" />
+                <input style={ST.input} type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="ion@stylehub.ro" />
                 <label style={ST.label}>Telefon</label>
                 <input style={ST.input} value={form.phone}    onChange={e => set("phone", e.target.value)}    placeholder="07xx xxx xxx" />
                 <label style={ST.label}>Parola *</label>
@@ -173,9 +173,9 @@ function AddProductModal({ onClose, onAdd, employeeId }) {
                 </div>
                 {error && <div style={ST.error}>{error}</div>}
                 <label style={ST.label}>Denumire *</label>
-                <input style={ST.input} value={form.name}     onChange={e => set("name", e.target.value)}     placeholder="ex: RTX 4090" />
+                <input style={ST.input} value={form.name}     onChange={e => set("name", e.target.value)}     placeholder="ex: Rochie Eleganta Neagra" />
                 <label style={ST.label}>Categorie *</label>
-                <input style={ST.input} value={form.category} onChange={e => set("category", e.target.value)} placeholder="ex: GPU, CPU, RAM…" />
+                <input style={ST.input} value={form.category} onChange={e => set("category", e.target.value)} placeholder="ex: Rochii, Tricouri, Geci…" />
                 <label style={ST.label}>Pret (Lei) *</label>
                 <input style={ST.input} type="number" value={form.price} onChange={e => set("price", e.target.value)} placeholder="0" />
                 <label style={ST.label}>Stoc *</label>
@@ -195,7 +195,7 @@ function DashboardSection({ employees, orders, services, products }) {
         { label: "Angajati",           value: employees.length,                                                                icon: "👥", color: "#9b59b6" },
         { label: "Comenzi active",     value: orders.filter(o => o.status === "processing" || o.status === "pending").length,  icon: "📦", color: "#FF6B35" },
         { label: "Service-uri active", value: services.filter(s => s.status === "processing" || s.status === "pending").length,icon: "🔧", color: "#3498db" },
-        { label: "Produse in stoc",    value: products.reduce((a, p) => a + p.stock, 0),                                       icon: "🖥️", color: "#2ecc71" },
+        { label: "Produse in stoc",    value: products.reduce((a, p) => a + p.stock, 0),                                       icon: "👗", color: "#2ecc71" },
     ];
 
     const pendingOrders   = orders.filter(o => o.status === "pending");
@@ -446,7 +446,7 @@ function ProductsSection({ products, setProducts, employees, notify, currentRole
             )}
 
             <div className="ap-section-header">
-                <h3 className="ap-section-title">🖥️ Produse & Piese ({products.length})</h3>
+                <h3 className="ap-section-title">👗 Produse & Colectii ({products.length})</h3>
                 {canAdd
                     ? <button style={ST.btn} onClick={() => setShowAdd(true)}>+ Produs nou</button>
                     : <div style={ST.warning}>Doar angajatii seniori pot adauga produse.</div>
@@ -487,7 +487,7 @@ export default function AdminPanel() {
     const navigate = useNavigate();
 
     // Change role to test views: "manager" | "senior" | "junior"
-    const currentUser = { id: 99, name: "Manager PCG", role: "manager" };
+    const currentUser = { id: 99, name: "Manager StyleHub", role: "manager" };
 
     const [activeSection, setActiveSection] = useState("dashboard");
     const [notification,  setNotification]  = useState(null);
@@ -505,7 +505,7 @@ export default function AdminPanel() {
         { id: "dashboard", label: "Panou General",  icon: "📊" },
         { id: "orders",    label: "Comenzi",         icon: "📦" },
         { id: "service",   label: "Service",          icon: "🔧" },
-        { id: "products",  label: "Produse & Piese",  icon: "🖥️" },
+        { id: "products",  label: "Produse & Colectii", icon: "👗" },
         ...(currentUser.role === "manager" ? [{ id: "employees", label: "Angajati", icon: "👥" }] : []),
     ];
 
@@ -523,7 +523,7 @@ export default function AdminPanel() {
             {/* ── Header ── */}
             <div style={ST.header}>
                 <div style={ST.headerTop}>
-                    <div style={ST.logo}>PCG Admin</div>
+                    <div style={ST.logo}>StyleHub Admin</div>
 
                     <div className="ap-header-right-side">
                         <div className="ap-header-user">

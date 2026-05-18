@@ -5,12 +5,12 @@ import ST from '../../styles/styles';
 const S = {
     page: { ...ST.app, padding: '40px 20px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' },
     container: { width: '100%', maxWidth: 720, display: 'flex', flexDirection: 'column', gap: 24 },
-    backBtn: { background: 'transparent', border: 'none', color: '#FF6B35', fontSize: 15, fontWeight: 700, cursor: 'pointer', padding: 0, width: 'fit-content' },
+    backBtn: { background: 'transparent', border: 'none', color: '#8B5CF6', fontSize: 15, fontWeight: 700, cursor: 'pointer', padding: 0, width: 'fit-content' },
     header: { display: 'flex', flexDirection: 'column', gap: 6 },
-    headerTitle: { fontSize: 32, fontWeight: 900, margin: 0, background: 'linear-gradient(135deg,#FF6B35,#e94560)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
+    headerTitle: { fontSize: 32, fontWeight: 900, margin: 0, background: 'linear-gradient(135deg,#8B5CF6,#EC4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
     headerSub: { margin: 0, fontSize: 15, color: '#888' },
     fieldset: { ...ST.mContent, display: 'flex', flexDirection: 'column', gap: 0, padding: 24 },
-    legend: { fontSize: 13, fontWeight: 700, color: '#FF6B35', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16 },
+    legend: { fontSize: 13, fontWeight: 700, color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16 },
     formRow: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 },
     formGroup: { display: 'flex', flexDirection: 'column', marginBottom: 16 },
     formGroupLast: { display: 'flex', flexDirection: 'column', marginBottom: 0 },
@@ -21,7 +21,7 @@ const S = {
     // Succes
     successWrap: { ...ST.app, display: 'flex', justifyContent: 'center', alignItems: 'center' },
     successCard: { ...ST.mContent, textAlign: 'center', maxWidth: 520, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, margin: '60px auto' },
-    successIcon: { width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#FF6B35,#e94560)', color: '#fff', fontSize: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 },
+    successIcon: { width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#8B5CF6,#EC4899)', color: '#fff', fontSize: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 },
     successTitle: { fontSize: 26, margin: 0 },
     successText: { fontSize: 15, color: '#aaa', lineHeight: 1.6, margin: 0 },
     backToShopBtn: { ...ST.btn, padding: '12px 30px', fontSize: 15, marginTop: 8 },
@@ -85,9 +85,9 @@ function ServicePage() {
                     <div style={S.successIcon}>✓</div>
                     <h2 style={S.successTitle}>Cerere trimisa cu succes!</h2>
                     <p style={S.successText}>
-                        Te vom contacta la adresa <strong style={{ color: '#FF6B35' }}>{formData.email}</strong> sau la numarul{' '}
-                        <strong style={{ color: '#FF6B35' }}>{formData.telefon}</strong> pentru confirmarea programarii din{' '}
-                        <strong style={{ color: '#FF6B35' }}>
+                        Te vom contacta la adresa <strong style={{ color: '#8B5CF6' }}>{formData.email}</strong> sau la numarul{' '}
+                        <strong style={{ color: '#8B5CF6' }}>{formData.telefon}</strong> pentru confirmarea returului / schimbului programat pe{' '}
+                        <strong style={{ color: '#8B5CF6' }}>
                             {new Date(formData.data).toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' })}
                         </strong>.
                     </p>
@@ -105,8 +105,8 @@ function ServicePage() {
                 <button style={S.backBtn} onClick={() => navigate(-1)}>← Inapoi</button>
 
                 <div style={S.header}>
-                    <h1 style={S.headerTitle}>Cerere Service</h1>
-                    <p style={S.headerSub}>Completeaza formularul de mai jos si te vom contacta pentru a confirma programarea.</p>
+                    <h1 style={S.headerTitle}>Cerere Retur / Schimb</h1>
+                    <p style={S.headerSub}>Completeaza formularul de mai jos si te vom contacta pentru a confirma returul sau schimbul.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} noValidate>
@@ -148,13 +148,13 @@ function ServicePage() {
 
                     {/* DESCRIEREA PROBLEMEI */}
                     <div style={{ ...S.fieldset, marginTop: 16 }}>
-                        <div style={S.legend}>Descrierea problemei</div>
+                        <div style={S.legend}>Motivul returului / schimbului</div>
 
                         <div style={S.formGroupLast}>
-                            <label style={ST.label}>Descrie problema *</label>
+                            <label style={ST.label}>Descrie motivul *</label>
                             <textarea
                                 name="descriere" rows={5}
-                                placeholder="Descrie in detaliu problema intampinata (ex: PC-ul nu porneste, placa video emite artefacte, etc.)"
+                                placeholder="Descrie motivul returului sau schimbului (ex: marimea nu se potriveste, culoarea difera de poze, produs deteriorat, etc.)"
                                 value={formData.descriere} onChange={handleChange}
                                 style={{ ...ST.textarea, ...(errors.descriere ? S.inputError : {}), marginBottom: 0 }}
                             />
@@ -165,7 +165,7 @@ function ServicePage() {
 
                     {/* DATA PROGRAMARII */}
                     <div style={{ ...S.fieldset, marginTop: 16 }}>
-                        <div style={S.legend}>Data programarii</div>
+                        <div style={S.legend}>Data dorita pentru ridicare</div>
 
                         <div style={S.formGroupLast}>
                             <label style={ST.label}>Alege o data *</label>

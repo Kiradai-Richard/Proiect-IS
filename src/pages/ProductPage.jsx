@@ -103,7 +103,7 @@ function ProductPage() {
                             
                             <div className="delivery-info">
                                 <span className="in-stock">● În stoc</span>
-                                <p>Vândut și livrat de: <strong>PC Garage</strong></p>
+                                <p>Vândut și livrat de: <strong>StyleHub</strong></p>
                                 <p className="rate-info-box">
                                     Sau în 4 rate fără dobândă de doar {product.installments} RON
                                 </p>

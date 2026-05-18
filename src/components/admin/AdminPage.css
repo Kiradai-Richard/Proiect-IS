@@ -36,7 +36,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FF6B35, #e94560);
+    background: linear-gradient(135deg, #8B5CF6, #EC4899);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,7 +122,7 @@
 .ap-badge--cancelled  { background: #c0392b22; border-color: #c0392b44; color: #e74c3c; }
 
 /* Role modifiers */
-.ap-badge--senior  { background: #FF6B3522; border-color: #FF6B3544; color: #FF6B35; }
+.ap-badge--senior  { background: #8B5CF622; border-color: #8B5CF644; color: #8B5CF6; }
 .ap-badge--junior  { background: #9b59b622; border-color: #9b59b644; color: #9b59b6; }
 .ap-badge--manager { background: #f1c40f22; border-color: #f1c40f44; color: #f1c40f; }
 
@@ -205,7 +205,7 @@
     flex-shrink: 0;
 }
 
-.ap-emp-avatar--senior { background: linear-gradient(135deg, #FF6B35, #e94560); }
+.ap-emp-avatar--senior { background: linear-gradient(135deg, #8B5CF6, #EC4899); }
 .ap-emp-avatar--junior { background: linear-gradient(135deg, #9b59b6, #6c3483); }
 
 /* ── Category chip (products table) ────────────────────────────────────── */
@@ -299,7 +299,7 @@
 
 .ap-pending-row-name   { font-weight: 600; font-size: 13px; }
 .ap-pending-row-sub    { font-size: 12px; color: #888; }
-.ap-pending-row-amount { font-weight: 700; color: #FF6B35; }
+.ap-pending-row-amount { font-weight: 700; color: #8B5CF6; }
 
 /* ── Modal extras ───────────────────────────────────────────────────────── */
 .ap-modal-header {
@@ -365,7 +365,7 @@
 
 
 /* ── Colour helpers used inline for dynamic text ────────────────────────── */
-.ap-text-orange { color: #FF6B35; }
+.ap-text-orange { color: #8B5CF6; }
 .ap-text-blue   { color: #3498db; }
 .ap-text-muted  { color: #888;    }
 .ap-text-dim    { color: #666; font-size: 12px; }

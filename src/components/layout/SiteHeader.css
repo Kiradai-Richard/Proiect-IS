@@ -90,19 +90,19 @@
 .sort-dropdown:hover,
 .font-dropdown:focus,
 .sort-dropdown:focus {
-    border-color: #fc623c;
+    border-color: #8B5CF6;
     box-shadow: 0 0 5px rgba(252, 98, 60, 0.3);
 }
 
 .shortcuts-bar {
     position: relative;
-    background-color: #fc623c;
+    background-color: #8B5CF6;
     padding: 12px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    border-bottom: 2px solid #f12711;
+    border-bottom: 2px solid #7C3AED;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -152,7 +152,7 @@
 }
 
 .product-search-input:focus {
-    border-color: #ff6600;
+    border-color: #EC4899;
 }
 
 .search-results {
@@ -196,7 +196,7 @@
 
 .search-result-price {
     font-size: 13px;
-    color: #ff6600;
+    color: #EC4899;
     margin-top: 4px;
 }
 
