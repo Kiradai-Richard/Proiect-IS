@@ -5,7 +5,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCart } from '../components/cart';
 import SiteHeader from '../components/layout/SiteHeader';
 import {
-    mockSystems,
     mockProcessors,
     mockGpus,
     mockMotherboards,
@@ -76,7 +75,6 @@ function HomePage() {
     const clearPageSearch = () => setSearchParams({});
 
     const sections = [
-        { id: 'section-sisteme', title: 'Sisteme Desktop PC', products: mockSystems },
         { id: 'section-procesoare', title: 'Procesoare', products: mockProcessors },
         { id: 'section-placi-video', title: 'Plăci Video', products: mockGpus },
         { id: 'section-placi-baza', title: 'Plăci De Bază', products: mockMotherboards }
@@ -106,14 +104,11 @@ function HomePage() {
                     />
                 </div>
                 <div className="rating-banner">
-                    <span>👍</span> <span>👍</span> <span>👍</span>
+                    <span>⭐</span> <span>⭐</span> <span>⭐</span> <span>⭐</span> <span>⭐</span>
                 </div>
                 <div className="product-title">{proc.title}</div>
                 <div className="product-price">
                     {proc.price.toFixed(2).replace('.', ',')} RON
-                </div>
-                <div className="product-installments">
-                    4 rate fara dobanda, doar {proc.installments} RON
                 </div>
             </div>
             <button
@@ -194,11 +189,11 @@ function Footer() {
             gap: '20px'
         }}>
             <div style={{ color: '#888', fontSize: '14px' }}>
-                &copy; {new Date().getFullYear()} Pc Garage. Toate drepturile rezervate.
+                &copy; {new Date().getFullYear()} Ceva site. Toate drepturile rezervate.
             </div>
             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                 <a style={{ color: '#e0e0e0', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}>
-                    ✉️ support@pcgarage.ro
+                    ✉️ support@cevasite.ro
                 </a>
                 <a style={{ color: '#e0e0e0', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}>
                     📞 0123 456 789

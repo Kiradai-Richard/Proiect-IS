@@ -58,7 +58,7 @@ function RegisterPage() {
                 <div className="inputs">
                     <div className="input">
                         <img src={user_icon} alt="user" />
-                        <input type="text" placeholder="Username" />
+                        <input type="text" placeholder="Nume de utilizator" />
                     </div>
 
                     <div className="input">
@@ -68,12 +68,12 @@ function RegisterPage() {
 
                     <div className="input">
                         <img src={password_icon} alt="password" />
-                        <input type="password" placeholder="Password" />
+                        <input type="password" placeholder="Parola" />
                     </div>
 
                     <div className="input">
                         <img src={password_icon} alt="confirm-password" />
-                        <input type="password" placeholder="Confirm Password" />
+                        <input type="password" placeholder="Confirma parola" />
                     </div>
                 </div>
 

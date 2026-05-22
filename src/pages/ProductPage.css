@@ -144,7 +144,7 @@
 .submit-review-btn {
     align-self: flex-start;
     padding: 12px 24px;
-    background-color: #fc623c; /* Culoarea ta de accent din bara de sus */
+    background-color: rgb(92, 184, 92); /* Culoarea ta de accent din bara de sus */
     color: white;
     border: none;
     border-radius: 6px;
@@ -219,7 +219,7 @@
 }
 
 .font-dropdown:hover {
-    border-color: #fc623c;
+    border-color: rgba(223, 58, 58, 0.95);
 }
 
 /* ==================================================

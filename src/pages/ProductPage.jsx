@@ -103,10 +103,7 @@ function ProductPage() {
                             
                             <div className="delivery-info">
                                 <span className="in-stock">● În stoc</span>
-                                <p>Vândut și livrat de: <strong>PC Garage</strong></p>
-                                <p className="rate-info-box">
-                                    Sau în 4 rate fără dobândă de doar {product.installments} RON
-                                </p>
+                                <p>Vândut și livrat de: <strong>Producator</strong></p>
                             </div>
                             
                             <button className="add-to-cart-btn large-btn" onClick={() => addToCart(product)}>

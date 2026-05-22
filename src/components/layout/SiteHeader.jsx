@@ -46,9 +46,7 @@ function HeaderMenu({ cartCount, isDarkMode }) {
                     <button style={{ ...ST.btn, padding: '10px 15px', fontSize: 14 }} onClick={() => handleNavigation('/register')}>
                         Register
                     </button>
-                    <button style={{ ...ST.btn, padding: '10px 15px', fontSize: 14 }} onClick={() => handleNavigation('/service', { state: { isDarkMode } })}>
-                        🔧 Service
-                    </button>
+
                     <button style={{ ...ST.btn, padding: '10px 15px', fontSize: 14 }} onClick={() => handleNavigation('/cart')}>
                         🛒 Cos {cartCount > 0 && `(${cartCount})`}
                     </button>
@@ -250,7 +248,7 @@ function SiteHeader({
                     style={{ ...ST.logo, fontSize: '60px' }}
                     onClick={() => navigate('/')}
                 >
-                    Pc Garage
+                    Componente PC
                 </button>
 
                 <HeaderMenu cartCount={cartCount} isDarkMode={isDarkMode} />
