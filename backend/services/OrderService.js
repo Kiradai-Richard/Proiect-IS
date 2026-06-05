@@ -45,9 +45,12 @@ class OrderService {
       const [uRows] = await conn.execute('SELECT * FROM users WHERE id = ?', [userId]);
       const u = uRows[0];
 
+      const ticketNumber = await orderRepo.getNextTicketNumber('purchase', conn);
+
       const orderId = await orderRepo.createWithItems({
         user_id: userId,
         order_type: 'purchase',
+        ticket_number: ticketNumber,
         customer_name: u.name,
         customer_email: u.email,
         customer_phone: u.phone || '',
@@ -70,12 +73,15 @@ class OrderService {
     const [uRows] = await pool.execute('SELECT * FROM users WHERE id = ?', [userId]);
     const u = uRows[0];
 
+    const ticketNumber = await orderRepo.getNextTicketNumber('service');
+
     const result = await orderRepo.rawQuery(
       `INSERT INTO orders
-         (user_id, order_type, customer_name, customer_email, customer_phone, customer_address, total, status, service_description, service_date)
-       VALUES (?, 'service', ?, ?, ?, ?, 0, 'pending', ?, ?)`,
+         (user_id, order_type, ticket_number, customer_name, customer_email, customer_phone, customer_address, total, status, service_description, service_date)
+       VALUES (?, 'service', ?, ?, ?, ?, ?, 0, 'pending', ?, ?)`,
       [
         userId,
+        ticketNumber,
         data.customer_name  || u.name,
         data.customer_email || u.email,
         data.customer_phone || u.phone || '',

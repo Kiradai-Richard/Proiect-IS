@@ -6,6 +6,18 @@ class OrderRepository extends BaseRepository {
 
   _toModel(row) { return Order.create(row); }
 
+  async getNextTicketNumber(orderType, conn = null) {
+    const run = conn
+      ? (sql, params) => conn.execute(sql, params).then(([rows]) => rows)
+      : (sql, params) => this.rawQuery(sql, params);
+
+    const rows = await run(
+      'SELECT COALESCE(MAX(ticket_number), 0) + 1 AS next_num FROM orders WHERE order_type = ?',
+      [orderType]
+    );
+    return rows[0].next_num;
+  }
+
   async findWithItems(id) {
     const rows = await this.rawQuery('SELECT * FROM orders WHERE id = ?', [id]);
     if (!rows.length) return null;

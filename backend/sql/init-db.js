@@ -83,6 +83,7 @@ async function init() {
   await conn.query(`
     CREATE TABLE IF NOT EXISTS orders (
       id                   INT AUTO_INCREMENT PRIMARY KEY,
+      ticket_number        INT NULL,
       user_id              INT NOT NULL,
       order_type           ENUM('purchase','service') NOT NULL,
       customer_name        VARCHAR(100) NOT NULL,
@@ -98,9 +99,53 @@ async function init() {
       created_at           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id)    REFERENCES users(id),
-      FOREIGN KEY (handled_by) REFERENCES users(id) ON DELETE SET NULL
+      FOREIGN KEY (handled_by) REFERENCES users(id) ON DELETE SET NULL,
+      UNIQUE KEY unique_ticket_per_type (order_type, ticket_number)
     )
   `);
+
+  // Migrare: adauga ticket_number pe baze de date existente
+  const [ticketCol] = await conn.query(`
+    SELECT COUNT(*) AS cnt FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = 'pc_garage' AND TABLE_NAME = 'orders' AND COLUMN_NAME = 'ticket_number'
+  `);
+  if (ticketCol[0].cnt === 0) {
+    await conn.query(`ALTER TABLE orders ADD COLUMN ticket_number INT NULL AFTER id`);
+    console.log('Coloana ticket_number adaugata.');
+  }
+
+  for (const orderType of ['purchase', 'service']) {
+    const [nullRows] = await conn.query(
+      `SELECT COUNT(*) AS cnt FROM orders WHERE order_type = ? AND ticket_number IS NULL`,
+      [orderType]
+    );
+    if (nullRows[0].cnt === 0) continue;
+
+    const [maxRow] = await conn.query(
+      `SELECT COALESCE(MAX(ticket_number), 0) AS max_num FROM orders WHERE order_type = ?`,
+      [orderType]
+    );
+    let nextNum = maxRow[0].max_num;
+
+    const [rows] = await conn.query(
+      `SELECT id FROM orders WHERE order_type = ? AND ticket_number IS NULL ORDER BY created_at ASC, id ASC`,
+      [orderType]
+    );
+    for (const row of rows) {
+      nextNum += 1;
+      await conn.query('UPDATE orders SET ticket_number = ? WHERE id = ?', [nextNum, row.id]);
+    }
+    console.log(`Numerotare ${orderType}: ${rows.length} inregistrari actualizate.`);
+  }
+
+  const [uniqueIdx] = await conn.query(`
+    SELECT COUNT(*) AS cnt FROM information_schema.STATISTICS
+    WHERE TABLE_SCHEMA = 'pc_garage' AND TABLE_NAME = 'orders' AND INDEX_NAME = 'unique_ticket_per_type'
+  `);
+  if (uniqueIdx[0].cnt === 0) {
+    await conn.query(`ALTER TABLE orders ADD UNIQUE KEY unique_ticket_per_type (order_type, ticket_number)`);
+    console.log('Index unique_ticket_per_type adaugat.');
+  }
 
   await conn.query(`
     CREATE TABLE IF NOT EXISTS order_items (

@@ -3,6 +3,7 @@ import ST from '../../styles/styles';
 import './AdminPage.css';
 import { useNavigate } from 'react-router-dom';
 import { api, getUser, logout } from '../../services/api';
+import { formatRoDate } from '../../utils/formatDate';
 
 const ORDER_STATUSES   = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
 const SERVICE_STATUSES = ['pending', 'confirmed', 'processing', 'delivered', 'cancelled'];
@@ -13,6 +14,9 @@ function StatusBadge({ status }) {
 }
 function RoleBadge({ role }) {
   return <span className={`ap-badge ap-badge--${role}`}>{role}</span>;
+}
+function formatTicketNumber(item) {
+  return item.ticketNumber ?? item.id;
 }
 function Notification({ notification }) {
   if (!notification) return null;
@@ -112,7 +116,7 @@ function ChangeStatusModal({ item, type, employees, onClose, onSave }) {
         </div>
         <div className="ap-modal-item-preview">
           <div className="ap-modal-item-label">{type === 'order' ? 'Comanda' : 'Tichet'}</div>
-          <div className="ap-modal-item-id">#{item.id}</div>
+          <div className="ap-modal-item-id">#{formatTicketNumber(item)}</div>
           <div className="ap-modal-item-desc">
             {type === 'order' ? item.items?.map(i => i.item_name).join(', ') : item.serviceDescription}
           </div>
@@ -286,7 +290,7 @@ function DashboardSection({ employees, orders, services, products, stats }) {
                 <div key={o.id} className="ap-pending-row">
                   <div>
                     <div className="ap-pending-row-name">{o.customerName}</div>
-                    <div className="ap-pending-row-sub">#{o.id}</div>
+                    <div className="ap-pending-row-sub">#{formatTicketNumber(o)}</div>
                   </div>
                   <div className="ap-pending-row-amount">{Number(o.total).toLocaleString()} Lei</div>
                 </div>
@@ -301,7 +305,7 @@ function DashboardSection({ employees, orders, services, products, stats }) {
                 <div key={s.id} className="ap-pending-row">
                   <div>
                     <div className="ap-pending-row-name">{s.serviceDescription?.substring(0, 50)}...</div>
-                    <div className="ap-pending-row-sub">{s.customerName} · #{s.id}</div>
+                    <div className="ap-pending-row-sub">{s.customerName} · #{formatTicketNumber(s)}</div>
                   </div>
                   <StatusBadge status={s.status} />
                 </div>
@@ -416,7 +420,7 @@ function OrdersSection({ orders, setOrders, employees, notify }) {
           <tbody>
             {filtered.map(order => (
               <tr key={order.id}>
-                <td style={ST.td} className="ap-text-orange ap-fw-700">#{order.id}</td>
+                <td style={ST.td} className="ap-text-orange ap-fw-700">#{formatTicketNumber(order)}</td>
                 <td style={ST.td}>{order.customerName}</td>
                 <td style={ST.td} className="ap-text-muted">{order.customerEmail}</td>
                 <td style={ST.td} className="ap-fw-700">{Number(order.total).toLocaleString()} Lei</td>
@@ -470,12 +474,12 @@ function ServiceSection({ services, setServices, employees, notify }) {
           <tbody>
             {filtered.map(srv => (
               <tr key={srv.id}>
-                <td style={ST.td} className="ap-text-blue ap-fw-700">#{srv.id}</td>
+                <td style={ST.td} className="ap-text-blue ap-fw-700">#{formatTicketNumber(srv)}</td>
                 <td style={ST.td}>{srv.customerName}</td>
                 <td style={{ ...ST.td, maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis' }} className="ap-text-muted">
                   {srv.serviceDescription}
                 </td>
-                <td style={ST.td} className="ap-text-dim">{srv.serviceDate || '—'}</td>
+                <td style={ST.td} className="ap-text-dim">{formatRoDate(srv.serviceDate)}</td>
                 <td style={ST.td}><StatusBadge status={srv.status} /></td>
                 <td style={ST.td}><button style={ST.btn} onClick={() => setModal(srv)}>Actualizeaza</button></td>
               </tr>
