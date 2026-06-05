@@ -20,73 +20,73 @@ export default function useCart(notify, fetchProducts) {
   const addToCart = useCallback((product, promo, user) => {
     if (!user) {
       notify("Trebuie sa te autentifici pentru a comanda.", "error");
-      return false; // signals caller to redirect to login
+      return false;
     }
 
-    setCart((prev) => {
-      const existing = prev.find((c) => c.id === product.id && !c.isPromoDiscount);
-      let nc;
+    // Citim cosul curent direct din localStorage pentru a evita side effects in setCart
+    let prev;
+    try { prev = JSON.parse(localStorage.getItem("pcg_cart")) || []; }
+    catch { prev = []; }
 
-      if (existing) {
-        if (existing.qty >= product.stock) {
-          notify("Stoc insuficient!", "error");
-          return prev;
-        }
-        nc = prev.map((c) =>
-          c.id === product.id && !c.isPromoDiscount
-            ? { ...c, qty: c.qty + 1 }
-            : c
+    const existing = prev.find((c) => c.id === product.id && !c.isPromoDiscount);
+
+    if (existing && existing.qty >= product.stock) {
+      notify("Stoc insuficient!", "error");
+      return false;
+    }
+
+    let nc;
+    if (existing) {
+      nc = prev.map((c) =>
+        c.id === product.id && !c.isPromoDiscount ? { ...c, qty: c.qty + 1 } : c
+      );
+    } else {
+      nc = [
+        ...prev,
+        {
+          id: product.id,
+          name: product.name,
+          price: Number(product.price),
+          stock: product.stock,
+          image: product.image,
+          specs: product.specs,
+          qty: 1,
+          isPromoDiscount: false,
+        },
+      ];
+    }
+
+    // Daca produsul are promotie, adauga articolul special cu pret negativ
+    if (promo) {
+      const promoKey = `promo_${product.id}`;
+      const existingPromo = nc.find((c) => c.promoKey === promoKey);
+      const itemInCart = nc.find((c) => c.id === product.id && !c.isPromoDiscount);
+      const discountPct = (promo.discountPercent || 10) / 100;
+      const discountTotal = -(Number(product.price) * itemInCart.qty * discountPct);
+
+      if (existingPromo) {
+        nc = nc.map((c) =>
+          c.promoKey === promoKey ? { ...c, price: discountTotal } : c
         );
       } else {
-        nc = [
-          ...prev,
-          {
-            id: product.id,
-            name: product.name,
-            price: Number(product.price),
-            stock: product.stock,
-            image: product.image,
-            specs: product.specs,
-            qty: 1,
-            isPromoDiscount: false,
-          },
-        ];
+        nc.push({
+          id: `promo_${product.id}`,
+          promoKey,
+          name: `Promotie: ${promo.name} (-${promo.discountPercent || 10}%)`,
+          price: discountTotal,
+          discountPct,
+          qty: 1,
+          isPromoDiscount: true,
+          linkedProductId: product.id,
+          image: product.image,
+        });
       }
+    }
 
-      // Daca produsul are promotie, adauga articolul special cu pret negativ
-      if (promo) {
-        const promoKey = `promo_${product.id}`;
-        const existingPromo = nc.find((c) => c.promoKey === promoKey);
-        const itemInCart = nc.find(
-          (c) => c.id === product.id && !c.isPromoDiscount
-        );
-        const discountTotal = -(Number(product.price) * itemInCart.qty * 0.1);
-
-        if (existingPromo) {
-          nc = nc.map((c) =>
-            c.promoKey === promoKey ? { ...c, price: discountTotal } : c
-          );
-        } else {
-          nc.push({
-            id: `promo_${product.id}`,
-            promoKey,
-            name: `Promotie: ${promo.name} (-10%)`,
-            price: discountTotal,
-            qty: 1,
-            isPromoDiscount: true,
-            linkedProductId: product.id,
-            image: product.image,
-          });
-        }
-      }
-
-      localStorage.setItem("pcg_cart", JSON.stringify(nc));
-      notify(`${product.name} adaugat!`);
-      return nc;
-    });
-
+    saveCart(nc);
+    notify(`${product.name} adaugat in cos!`);
     return true;
-  }, [notify]);
+  }, [notify, saveCart]);
 
   const removeFromCart = useCallback((item) => {
     setCart((prev) => {
@@ -102,7 +102,7 @@ export default function useCart(notify, fetchProducts) {
     });
   }, []);
 
-  const updateQty = useCallback((id, delta, products) => {
+  const updateQty = useCallback((id, delta) => {
     setCart((prev) => {
       let nc = prev.map((c) => {
         if (c.id !== id || c.isPromoDiscount) return c;
@@ -111,13 +111,12 @@ export default function useCart(notify, fetchProducts) {
         return { ...c, qty: nq };
       });
 
-      // Recalculeaza discountul promotiei daca exista
+      // Recalculeaza discountul promotiei folosind pretul din cos
       const updated = nc.find((c) => c.id === id && !c.isPromoDiscount);
       if (updated) {
-        const originalPrice = products.find((p) => p.id === id)?.price || 0;
         nc = nc.map((c) =>
           c.linkedProductId === id
-            ? { ...c, price: -(Number(originalPrice) * updated.qty * 0.1) }
+            ? { ...c, price: -(Number(updated.price) * updated.qty * (c.discountPct || 0.1)) }
             : c
         );
       }

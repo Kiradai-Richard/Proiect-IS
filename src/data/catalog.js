@@ -130,5 +130,5 @@ export const allProducts = [
 export function matchesSearchQuery(product, query) {
     const term = query.trim().toLowerCase();
     if (!term) return true;
-    return product.title.toLowerCase().includes(term);
+    return (product.name || product.title || '').toLowerCase().includes(term);
 }

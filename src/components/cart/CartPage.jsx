@@ -32,7 +32,7 @@ export default function CartPage() {
 
   const onCheckout = async () => {
     const success = await handleCheckout();
-    if (success) navigate("/home");
+    if (success) navigate("/");
   };
 
   return (
@@ -74,7 +74,7 @@ export default function CartPage() {
               <CartItem
                 key={`${item.id}_${idx}`}
                 item={item}
-                onUpdateQty={(id, delta) => updateQty(id, delta, [])}
+                onUpdateQty={(id, delta) => updateQty(id, delta)}
                 onRemove={removeFromCart}
               />
             ))}

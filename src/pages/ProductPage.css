@@ -248,3 +248,25 @@
         margin-top: 20px;
     }
 }
+/* Notification toast */
+.notification-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    animation: slideInToast 0.25s ease;
+    pointer-events: none;
+}
+.notification-toast.success { background: #1a7a3a; }
+.notification-toast.error   { background: #c0392b; }
+
+@keyframes slideInToast {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

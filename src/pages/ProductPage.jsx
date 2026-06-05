@@ -1,14 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../components/cart';
 import ST from '../styles/styles';
 import SiteHeader from '../components/layout/SiteHeader';
+import { api, getUser } from '../services/api';
 import './ProductPage.css';
 
 function ProductPage() {
     const location = useLocation();
     const navigate = useNavigate();
     const product = location.state?.product;
+    const promo   = location.state?.promo || null;
     
     // Extragem stările din localStorage
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -23,6 +25,11 @@ function ProductPage() {
     const [notification, setNotification] = useState(null);
     const [review, setReview] = useState('');
     const [reviewsList, setReviewsList] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
+
+    useEffect(() => {
+        api('/products').then(setAllProducts).catch(() => {});
+    }, []);
 
     const notify = useCallback((msg, type = "success") => {
         setNotification({ msg, type });
@@ -73,23 +80,24 @@ function ProductPage() {
                 onFontChange={handleFontChange}
                 cartCount={cartCount}
                 showBackButton
+                products={allProducts}
             />
 
             {notification && (
-                <div className={`notification ${notification.type}`}>
+                <div className={`notification-toast ${notification.type}`}>
                     {notification.msg}
                 </div>
             )}
 
             <div className="product-details-content">
-                <h2 className="product-page-title">{product.title}</h2>
+                <h2 className="product-page-title">{product.name || product.title}</h2>
                 
                 <div className="product-layout">
                     <div className="product-image-section">
                         <div className="main-image-wrapper">
-                            <img 
-                                src={product.image} 
-                                alt={product.title} 
+                            <img
+                                src={product.image}
+                                alt={product.name || product.title}
                                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400?text=Fara+Imagine'; }}
                             />
                         </div>
@@ -98,7 +106,22 @@ function ProductPage() {
                     <div className="product-action-section">
                         <div className="action-box">
                             <div className="product-page-price">
-                                {product.price.toFixed(2).replace('.', ',')} <span>RON</span>
+                              {promo ? (
+                                <>
+                                  <span style={{ textDecoration: 'line-through', color: '#888', fontSize: 18, marginRight: 8 }}>
+                                    {Number(product.price).toFixed(2).replace('.', ',')}
+                                  </span>
+                                  <span style={{ color: '#2ecc71' }}>
+                                    {(Number(product.price) * (1 - (promo.discountPercent || 10) / 100)).toFixed(2).replace('.', ',')}
+                                  </span>
+                                  <span> RON</span>
+                                  <div style={{ fontSize: 13, color: '#e94560', marginTop: 4 }}>
+                                    {promo.name} -{promo.discountPercent || 10}%
+                                  </div>
+                                </>
+                              ) : (
+                                <>{Number(product.price).toFixed(2).replace('.', ',')} <span>RON</span></>
+                              )}
                             </div>
                             
                             <div className="delivery-info">
@@ -109,7 +132,7 @@ function ProductPage() {
                                 </p>
                             </div>
                             
-                            <button className="add-to-cart-btn large-btn" onClick={() => addToCart(product)}>
+                            <button className="add-to-cart-btn large-btn" onClick={() => { const u = getUser(); if (!u) { notify('Trebuie sa te autentifici!', 'error'); return; } addToCart(product, promo, u); }}>
                                 Adaugă în Coș
                             </button>
                             
