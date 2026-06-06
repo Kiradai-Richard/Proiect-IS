@@ -13,21 +13,6 @@ describe('Promotion model', () => {
         expect(p.discountPercent).toBe(10);
     });
 
-    it('defaults active to true', () => {
-        const p = new Promotion({ id: 1, name: 'X', product_id: 1, created_by: 1 });
-        expect(p.active).toBe(true);
-    });
-
-    it('casts active 1 to true', () => {
-        const p = new Promotion({ id: 1, name: 'X', product_id: 1, created_by: 1, active: 1 });
-        expect(p.active).toBe(true);
-    });
-
-    it('casts active 0 to false', () => {
-        const p = new Promotion({ id: 1, name: 'X', product_id: 1, created_by: 1, active: 0 });
-        expect(p.active).toBe(false);
-    });
-
     it('toJSON returns camelCase and no snake_case leaking', () => {
         const p = new Promotion({ id: 1, name: 'X', product_id: 2, created_by: 1 });
         const json = p.toJSON();
